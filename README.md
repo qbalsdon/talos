@@ -6,8 +6,8 @@ This is a Raspberry Pi project, but should work on any linux system with adb.
 
 From the command line, run
 ```
-wget -O -  https://github.com/qbalsdon/talos/installation/setup_adb.sh | sh
-wget -O -  https://github.com/qbalsdon/talos/installation/setup_scrcpy.sh | sh
+wget -O - https://raw.githubusercontent.com/qbalsdon/talos/main/installation/setup_adb.sh | sudo sh
+wget -O - https://raw.githubusercontent.com/qbalsdon/talos/main/installation/setup_scrcpy.sh | sudo sh
 ```
 
 # Helpful
