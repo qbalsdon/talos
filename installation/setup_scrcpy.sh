@@ -24,15 +24,15 @@ cd ..
 
 echo "~~Installing dependencies~~"
 # runtime dependencies
-sudo apt install ffmpeg libsdl2-2.0-0 adb
+sudo apt install ffmpeg libsdl2-2.0-0 adb --yes
 
 # client build dependencies
 sudo apt install gcc git pkg-config meson ninja-build \
                  libavcodec-dev libavformat-dev libavutil-dev \
-                 libsdl2-dev
+                 libsdl2-dev --yes
 
 # server build dependencies
-sudo apt install openjdk-8-jdk
+sudo apt install openjdk-8-jdk --yes
 
 echo "~~Manual build of SCRCPY~~"
 echo "    ~~Cloning repository~~"
