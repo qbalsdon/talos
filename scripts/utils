@@ -1,0 +1,35 @@
+#!/bin/sh
+
+function getDevice()
+{
+  if [ -z "$DEVICE" ]; then
+    DEVICE=$(adb devices | sed -n 2p | awk '{print $1;}')
+  fi
+
+  if [ -z "$DEVICE" ]; then
+    echo "~~ No devices or emulators attached ~~"
+    exit -1
+  fi
+  echo $DEVICE
+}
+
+function screenSize() {
+  SIZE=$(adb -s $DEVICE shell wm size)
+  SIZE=$(echo $SIZE | awk '{print $3}')
+  IFS='x' read -ra ADDR <<< "$SIZE"
+  WIDTH="${ADDR[0]}"
+  HEIGHT="${ADDR[1]}"
+  HALFW=$(( $WIDTH / 2 ))
+  HALFH=$(( $HEIGHT / 2 ))
+  QUATERW=$(( $WIDTH / 4 ))
+  QUATERH=$(( $HEIGHT / 4 ))
+}
+
+function showArgs() {
+  echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  while [[ "$#" -gt 0 ]]; do
+    echo "    ===> [$1]"
+    shift
+  done
+  echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+}

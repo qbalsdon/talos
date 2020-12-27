@@ -1,0 +1,31 @@
+#!/bin/sh
+
+EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $EXEC_DIR/utils
+
+USAGE="swipeThenTap [-s DEVICE] [-u|-d|-l|-r] [-e ELEMENT]"
+#defaults
+
+DIR="-u"
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -s|--device) DEVICE="$2"; shift ;;
+        -u|--up) DIR="-u";;
+        -d|--down) DIR="-d";;
+        -l|--left) DIR="-l";;
+        -r|--right) DIR="-r";;
+        -e|--element) ELEMENT="$2"; shift ;;
+        -h|--help) echo $USAGE; exit 0 ;;
+        *) echo "Unknown parameter passed: $1. Usage: $USAGE"; exit 1 ;;
+    esac
+    shift
+done
+DEVICE=$(getDevice)
+
+if [ -z "$ELEMENT" ] ; then
+  echo "Specificy an element: $USAGE"
+  exit 1;
+fi
+
+sh $EXEC_DIR/swipeTo -s $DEVICE $DIR -e "$ELEMENT"
+sh $EXEC_DIR/tap -s $DEVICE -e "$ELEMENT"

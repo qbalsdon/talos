@@ -1,0 +1,23 @@
+#!/bin/sh
+EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $EXEC_DIR/utils
+USAGE="talkback [-e|-d] [-s device]"
+ENABLE=false #default
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -e) ENABLE=true ;;
+        -d) ENABLE=false ;;
+        -s|--device) DEVICE="$2"; shift ;;
+        -h|--help) echo $USAGE; exit 0 ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
+DEVICE=$(getDevice)
+
+if [ "$ENABLE" = true ]; then
+  adb -s "$DEVICE" shell settings put secure enabled_accessibility_services com.google.android.marvin.talkback/com.google.android.marvin.talkback.TalkBackService
+else
+  adb -s "$DEVICE" shell am force-stop com.google.android.marvin.talkback
+fi

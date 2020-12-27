@@ -1,0 +1,32 @@
+#!/bin/sh
+
+EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $EXEC_DIR/utils
+
+SETTING="Display Power: state="
+CHECK="On"
+
+USAGE="ensureLocked [-s DEVICE]"
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -s|--device) DEVICE="$2"; shift ;;
+        -h|--help) echo $USAGE; exit 0 ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
+DEVICE=$(getDevice)
+
+RESULT=$(adb -s $DEVICE shell dumpsys power | grep "$SETTING")
+
+STATE=${RESULT#"$SETTING"}
+
+#echo "Current screen state: $STATE"
+
+if [ "$STATE" = "ON" ]; then
+  #echo "SCREEN IS ON, PRESSING POWER BUTTON"
+  sh powerPress -s $DEVICE
+#else
+  #echo "SCREEN IS OFF, NO ACTION"
+fi

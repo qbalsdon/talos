@@ -1,0 +1,42 @@
+#!/bin/sh
+EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $EXEC_DIR/utils
+
+USAGE="waitFor -e ELEMENT -d DELAY_SECONDS [-s DEVICE]"
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -s|--device) DEVICE="$2"; shift ;;
+        -d|--delay) DELAY="$2"; shift ;;
+        -e|--element) ELEMENT="$2"; shift ;;
+        -h|--help) echo $USAGE; exit 0 ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
+if [ -z "$DELAY" ]; then
+  DELAY=5
+fi
+
+if [ -z "$ELEMENT" ]; then
+  echo "No element defined"
+  exit 1;
+fi
+
+DEVICE=$(getDevice)
+
+XML=$(sh $EXEC_DIR/fetchUI -s $DEVICE)
+while [[ "$XML" != *"$ELEMENT"* ]] ; do
+  for ((i=1; i<=DELAY; i++)) ; do
+    MOD=`expr $i % 3`
+    case $MOD in
+      0) TEXT="    ..." ;;
+      1) TEXT="    . ." ;;
+      2) TEXT="     . " ;;
+    esac
+    printf "\r$TEXT"
+    sleep 1
+  done
+  printf "\r    ==>"
+  XML=$(sh $EXEC_DIR/fetchUI -s $DEVICE)
+done

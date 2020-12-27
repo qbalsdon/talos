@@ -1,0 +1,26 @@
+#!/bin/sh
+
+EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $EXEC_DIR/utils
+USAGE="unlockWithSwipe -p PASSWORD [-s DEVICE]"
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -p|--password) PASSWORD="$2"; shift ;;
+        -s|--device) DEVICE="$2"; shift ;;
+        -h|--help) echo $USAGE; exit 0 ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
+DEVICE=$(getDevice)
+
+if [ -z $PASSWORD ] ; then
+  echo "Password required. Usage: 'unlockWithSwipe -p [PASSWORD]'"
+  exit -1
+fi
+
+. $EXEC_DIR/ensureLocked -s $DEVICE
+. $EXEC_DIR/powerPress -s $DEVICE
+adb -s $DEVICE shell input swipe 200 900 200 300 #swipe up
+adb -s $DEVICE shell input text "$PASSWORD"

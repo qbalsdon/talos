@@ -1,0 +1,85 @@
+#!/bin/sh
+
+EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $EXEC_DIR/utils
+
+USAGE="swipe [-s DEVICE] [-u|-d|-l|-r] [-c LENGTH]"
+#defaults
+LEN=200
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -s|--device) DEVICE="$2"; shift ;;
+        -u|--up) UP=true; shift ;;
+        -d|--down) DOWN=true; shift ;;
+        -l|--left) LEFT=true; shift ;;
+        -r|--right) RIGHT=true; shift ;;
+        -c|--length) LEN="$2"; shift ;;
+        -h|--help) echo $USAGE; exit 0 ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+if [ -z "$UP" ] && [ -z "$DOWN" ] && [ -z "$LEFT" ] && [ -z "$RIGHT" ] ; then
+  UP=true #default
+  DOWN=false
+  LEFT=false
+  RIGHT=false
+fi
+
+DEVICE=$(getDevice)
+
+screenSize #WIDTH, HEIGHT
+
+STARTX=$HALFW
+STARTY=$HALFH
+
+REPEATW=$(( $LEN / $HALFW ))
+REPEATH=$(( $LEN / $HALFH ))
+
+REMAINDERW=$(( $LEN - ($REPEATW * $HALFW) ))
+REMAINDERH=$(( $LEN - ($REPEATH * $HALFH) ))
+
+if [ "$UP" = true ]; then
+  START=$(( $QUATERH * 3 ))
+  END=$QUATERH
+
+  for ((i=1; i<=$REPEATH; i++)) ; do
+    adb -s $DEVICE shell input swipe $STARTX $START $STARTX $END
+  done
+  END=$(( $START - $REMAINDERH ))
+  adb -s $DEVICE shell input swipe $STARTX $START $STARTX $END
+  exit 0
+fi
+
+if [ "$DOWN" = true ]; then
+  START=$QUATERH
+  END=$(( $QUATERH * 3 ))
+  for ((i=1; i<=$REPEATH; i++)) ; do
+    adb -s $DEVICE shell input swipe $STARTX $START $STARTX $END
+  done
+  END=$(( $START + $REMAINDERH ))
+  adb -s $DEVICE shell input swipe $STARTX $START $STARTX $END
+  exit 0
+fi
+
+if [ "$LEFT" = true ]; then
+  START=$(( $QUATERW * 3 ))
+  END=$QUATERW
+  for ((i=1; i<=$REPEATW; i++)) ; do
+    adb -s $DEVICE shell input swipe $START $STARTY $END $STARTY
+  done
+  END=$(( $START - $REMAINDERW ))
+  adb -s $DEVICE shell input swipe $START $STARTY $END $STARTY
+  exit 0
+fi
+
+if [ "$RIGHT" = true ]; then
+  START=$QUATERW
+  END=$(( $QUATERW * 3 ))
+  for ((i=1; i<=$REPEATW; i++)) ; do
+    adb -s $DEVICE shell input swipe $START $STARTY $END $STARTY
+  done
+  END=$(( $START + $REMAINDERW ))
+  adb -s $DEVICE shell input swipe $START $STARTY $END $STARTY
+  exit 0
+fi

@@ -1,0 +1,68 @@
+#!/bin/sh
+
+EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $EXEC_DIR/utils
+
+USAGE="swipeTo [-s DEVICE] [-u|-d|-l|-r] [-e ELEMENT]"
+#defaults
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -s|--device) DEVICE="$2"; shift ;;
+        -u|--up) UP=true;;
+        -d|--down) DOWN=true;;
+        -l|--left) LEFT=true;;
+        -r|--right) RIGHT=true;;
+        -e|--element) ELEMENT="$2"; shift ;;
+        -h|--help) echo $USAGE; exit 0 ;;
+        *) echo "Unknown parameter passed: $1. Usage: $USAGE"; exit 1 ;;
+    esac
+    shift
+done
+
+if [ -z "$ELEMENT" ] ; then
+  echo "Specificy an element: $USAGE"
+  exit 1;
+fi
+
+if [ -z "$UP" ] && [ -z "$DOWN" ] && [ -z "$LEFT" ] && [ -z "$RIGHT" ] ; then
+  UP=true #default
+  DOWN=false
+  LEFT=false
+  RIGHT=false
+fi
+
+DEVICE=$(getDevice)
+
+screenSize #WIDTH, HEIGHT
+STARTX=$HALFW
+STARTY=$HALFH
+
+XML=$(sh $EXEC_DIR/fetchUI -s $DEVICE)
+
+while [[ "$XML" != *"$ELEMENT"* ]] ; do
+  if [ "$UP" = true ]; then
+    START=$(( $QUATERH * 3 ))
+    END=$(( $QUATERH ))
+    adb -s $DEVICE shell input swipe $STARTX $START $STARTX $END
+  fi
+
+  if [ "$DOWN" = true ]; then
+    START=$QUATERH
+    END=$(( $QUATERH * 3 ))
+    adb -s $DEVICE shell input swipe $STARTX $START $STARTX $END
+  fi
+
+  if [ "$LEFT" = true ]; then
+    START=$(( $QUATERW * 3 ))
+    END=$(( $QUATERW ))
+    adb -s $DEVICE shell input swipe $START $STARTY $END $STARTY
+  fi
+
+  if [ "$RIGHT" = true ]; then
+    START=$QUATERW
+    END=$(( $QUATERW * 3 ))
+    adb -s $DEVICE shell input swipe $START $STARTY $END $STARTY
+  fi
+
+  XML=$(sh $EXEC_DIR/fetchUI -s $DEVICE)
+done

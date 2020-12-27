@@ -1,0 +1,30 @@
+#!/bin/sh
+EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $EXEC_DIR/utils
+
+USAGE="fetchUI [-o OUTPUTFILE] [-s DEVICE]"
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -o|--outputFile) outputFile="$2"; shift ;;
+        -s|--device) DEVICE="$2"; shift ;;
+        -h|--help) echo $USAGE; exit 0 ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
+DEVICE=$(getDevice)
+
+RAWXML=$(adb -s $DEVICE exec-out uiautomator dump --c /dev/tty)
+
+XML=$(echo ${RAWXML:0:$((${#RAWXML}-32))}) #I don't like this but I need to move on
+
+XML=$(echo $XML | tidy -xml -config $EXEC_DIR/../config/tidyConfig)
+
+if [ -z $outputFile ] ; then
+  echo "$XML"
+else
+  [ -e $outputFile ] && rm $outputFile
+  echo "$XML" > $outputFile
+  echo "XML Written to $outputFile"
+fi

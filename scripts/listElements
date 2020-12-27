@@ -1,0 +1,65 @@
+#!/bin/sh
+EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $EXEC_DIR/utils
+
+USAGE="listElements -a ATTRIBUTE [-s DEVICE] [-f|-x XML_REFERENCE]"
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -f|--file) XMLFILE="$2"; shift ;;
+        -x|--xml) XML="$2"; shift ;;
+        -a|--attribute) ATTRIBUTE="$2"; shift ;;
+        -s|--device) DEVICE="$2"; shift ;;
+        -h|--help) echo $USAGE; exit 0 ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
+DEVICE=$(getDevice)
+
+if [ -z "$ATTRIBUTE" ]; then
+  echo "~~ No element given, use -a [ATTRIBUTE NAME]: resource-id|id|text|class|selected|package ~~"
+  exit -1
+fi
+
+VALIDOPTIONS=("resource-id" "id" "text" "class" "selected" "package")
+for option in ${VALIDOPTIONS[@]}; do
+  if [ "$ATTRIBUTE" = "$option" ]; then
+    SELECTED_ATTRIBUTE=$option
+  fi
+done
+
+if [ -z "$SELECTED_ATTRIBUTE" ]; then
+  echo "~~ No element given, use -a [ATTRIBUTE NAME]: resource-id|id|text|class|selected|package ~~"
+  exit -1
+fi
+
+if [ "$SELECTED_ATTRIBUTE" = "id" ]; then
+  SELECTED_ATTRIBUTE="resource-id"
+fi
+
+if [ -z "$XML" ]; then
+  if [ -z "$XMLFILE" ]; then
+    XML=$(sh $EXEC_DIR/fetchUI -s $DEVICE)
+  else
+    XML=$(cat $XMLFILE)
+  fi
+fi
+
+echo "$XML" | grep "$SELECTED_ATTRIBUTE" | while read -r line ; do
+  attr=$(echo "$line" | sed "s/^.*$SELECTED_ATTRIBUTE=\"//" | cut -f1 -d"\"")
+
+  if [ -z "$attr" ] ; then
+    continue
+  fi
+  BOUNDS=$(echo "$line" | sed 's/^.*bounds="//' | cut -f1 -d"\"")
+
+  IFS='][' read -ra ADDR <<< "$BOUNDS"
+  IFS=',' read -ra ST <<< "${ADDR[1]}"
+  IFS=',' read -ra EN <<< "${ADDR[3]}"
+  MIDX=$((${ST[0]} + ((${EN[0]} - ${ST[0]}) / 2)))
+  MIDY=$((${ST[1]} + ((${EN[1]} - ${ST[1]}) / 2)))
+
+  echo "    $attr"
+  echo "        $MIDX $MIDY"
+done
