@@ -36,31 +36,31 @@ DEVICE=$(getDevice)
 screenSize #WIDTH, HEIGHT
 STARTX=$HALFW
 STARTY=$HALFH
-
+FACTOR=2
 XML=$(sh $EXEC_DIR/fetchUI -s $DEVICE)
 
 while [[ "$XML" != *"$ELEMENT"* ]] ; do
   if [ "$UP" = true ]; then
-    START=$(( $QUATERH * 3 ))
+    START=$(( $QUATERH * $FACTOR ))
     END=$(( $QUATERH ))
     adb -s $DEVICE shell input swipe $STARTX $START $STARTX $END
   fi
 
   if [ "$DOWN" = true ]; then
     START=$QUATERH
-    END=$(( $QUATERH * 3 ))
+    END=$(( $QUATERH * $FACTOR ))
     adb -s $DEVICE shell input swipe $STARTX $START $STARTX $END
   fi
 
   if [ "$LEFT" = true ]; then
-    START=$(( $QUATERW * 3 ))
+    START=$(( $QUATERW * $FACTOR ))
     END=$(( $QUATERW ))
     adb -s $DEVICE shell input swipe $START $STARTY $END $STARTY
   fi
 
   if [ "$RIGHT" = true ]; then
     START=$QUATERW
-    END=$(( $QUATERW * 3 ))
+    END=$(( $QUATERW * $FACTOR ))
     adb -s $DEVICE shell input swipe $START $STARTY $END $STARTY
   fi
 

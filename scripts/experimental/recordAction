@@ -1,0 +1,8 @@
+#!/bin/sh
+#sh restartApp -a com.balsdon.annoyingapp
+#adb shell getevent > pattern.event
+
+sh convert.sh > sendme.command
+adb push sendme.command /sdcard/  
+adb shell sh /sdcard/sendme.command
+adb shell rm /sdcard/sendme.command
