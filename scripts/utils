@@ -1,5 +1,4 @@
-#!/bin/sh
-
+#!/bin/bash
 function getDevice()
 {
   if [ -z "$DEVICE" ]; then

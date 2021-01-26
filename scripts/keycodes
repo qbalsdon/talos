@@ -1,5 +1,4 @@
-#!/bin/sh
-
+#!/bin/bash
 echo "0 -->  \"KEYCODE_UNKNOWN\""
 echo "1 -->  \"KEYCODE_MENU\""
 echo "2 -->  \"KEYCODE_SOFT_RIGHT\""

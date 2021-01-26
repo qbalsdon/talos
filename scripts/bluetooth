@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $EXEC_DIR/utils
 USAGE="bluetooth [-e|-d] [-s device]"
