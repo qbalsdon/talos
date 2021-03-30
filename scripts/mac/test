@@ -1,0 +1,21 @@
+#!/bin/bash
+EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+device="/dev/input/event3"
+ALT_KEY=133 #KEYCODE_ALT_LEFT
+LEFT_KEY=216 #KEYCODE_DPAD_RIGHT
+RIGHT_KEY=215 #KEYCODE_DPAD_RIGHT
+
+BLANK_EVENT="sendevent $device 0 0 0"
+
+HOLD=$ALT_KEY
+REF_KEY=$RIGHT_KEY
+
+INST_DN="sendevent $device 1 $HOLD 1    && $BLANK_EVENT && sendevent $device 1 $REF_KEY 1 && $BLANK_EVENT"
+INST_UP="sendevent $device 1 $REF_KEY 0 && $BLANK_EVENT && sendevent $device 1 $HOLD 0    && $BLANK_EVENT"
+
+adb shell "$INST_DN"
+sleep 1
+adb shell "$INST_UP"
+
+#adb shell "input keyevent $ALT_KEY & input keyevent $RIGHT_KEY"

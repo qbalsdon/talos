@@ -1,0 +1,48 @@
+#!/bin/bash
+EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $EXEC_DIR/utils
+USAGE="animation [-s device] [-e|-d]"
+#defaults
+TOGGLE=true
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -e) ENABLE=true;TOGGLE=false ;;
+        -d) ENABLE=false;TOGGLE=false ;;
+        -s|--device) DEVICE="$2"; shift ;;
+        -h|--help) echo $USAGE; exit 0 ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
+DEVICE=$(getDevice)
+
+VALUE_OFF="0"
+VALUE_ON="1.0"
+
+if [ "$TOGGLE" = true ]; then
+  STATUS=$(adb -s "$DEVICE" shell settings get global window_animation_scale)
+  echo "  ~~> CURRENT STATUS: [$STATUS]"
+  if [ "$STATUS" = "$VALUE_OFF" ]; then
+    echo "    |--> ENABLING"
+    ENABLE=true
+  else
+    ENABLE=false
+    echo "    |--> DISABLING"
+  fi
+fi
+
+
+if [ "$ENABLE" = true ]; then
+  VALUE=1.0
+else
+  VALUE=0
+fi
+
+adb -s "$DEVICE" shell settings put global window_animation_scale $VALUE
+adb -s "$DEVICE" shell settings put global transition_animation_scale $VALUE
+adb -s "$DEVICE" shell settings put global animator_duration_scale $VALUE
+
+adb -s "$DEVICE" shell settings get global window_animation_scale
+adb -s "$DEVICE" shell settings get global transition_animation_scale
+adb -s "$DEVICE" shell settings get global animator_duration_scale

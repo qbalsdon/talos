@@ -1,0 +1,18 @@
+#!/bin/bash
+EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $EXEC_DIR/utils
+USAGE="okDialog -c \"[COMMAND]\""
+
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -c|--command) COMMAND="$2"; shift ;;
+        -h|--help) echo $USAGE; exit 0 ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
+RESULT=$(eval $COMMAND)
+PARAMETER=$RESULT #${RESULT//$'\n'/'\\\\n'}
+PARAMETER="display dialog \"$PARAMETER\" buttons {\"Ok\"} default button \"Ok\" with title \"Result\""
+osascript -e "$PARAMETER" &

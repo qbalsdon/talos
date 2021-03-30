@@ -1,0 +1,9 @@
+#!/bin/sh
+
+ACTION=$1
+
+if [ "$ACTION" = "UNLOCK_JATL41" ]; then
+  pkill scrcpy; sleep 0.1 && sh unlockWithSwipe -p 314159 && scrcpy -Sw &
+fi
+
+exit 0

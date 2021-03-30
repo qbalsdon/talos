@@ -1,0 +1,8 @@
+#!/bin/sh
+
+APP_NAME=$1
+#KEY_NAME=$2
+#FUNCTION=$3
+
+command osascript -e "tell application \"$APP_NAME\" to activate"
+#command osascript -e "tell application \"System Events\" to keystroke \"$KEY_NAME\" using { $FUNCTION }"

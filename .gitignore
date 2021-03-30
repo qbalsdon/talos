@@ -1,1 +1,3 @@
 *.DS_Store
+Secrets.h
+node_modules/

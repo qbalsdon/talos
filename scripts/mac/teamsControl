@@ -1,0 +1,14 @@
+#!/bin/bash
+
+COMMAND="$1"
+
+osascript -- - "$COMMAND" <<'EOF'
+  on run (argv)
+	    tell application "Microsoft Teams"
+		      activate
+	    tell application "System Events" to keystroke argv using {command down, shift down}
+	    end tell
+
+	    return
+  end run
+EOF

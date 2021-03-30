@@ -52,6 +52,11 @@ echo "$XML" | grep "$SELECTED_ATTRIBUTE" | while read -r line ; do
   if [ -z "$attr" ] ; then
     continue
   fi
+
+  if [ "$SELECTED_ATTRIBUTE" = "resource-id" ]; then
+    attr=$(echo "$attr"| sed 's/.*\///g')
+  fi
+
   BOUNDS=$(echo "$line" | sed 's/^.*bounds="//' | cut -f1 -d"\"")
 
   IFS='][' read -ra ADDR <<< "$BOUNDS"
@@ -60,6 +65,5 @@ echo "$XML" | grep "$SELECTED_ATTRIBUTE" | while read -r line ; do
   MIDX=$((${ST[0]} + ((${EN[0]} - ${ST[0]}) / 2)))
   MIDY=$((${ST[1]} + ((${EN[1]} - ${ST[1]}) / 2)))
 
-  echo "    $attr"
-  echo "        $MIDX $MIDY"
+  echo "    $attr  [$MIDX, $MIDY]"
 done

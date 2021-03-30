@@ -1,12 +1,14 @@
 #!/bin/bash
 EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $EXEC_DIR/utils
-USAGE="talkback [-e|-d] [-s device]"
-ENABLE=false #default
+USAGE="talkback [-s device] [-e|-d|-o]"
+#defaults
+TOGGLE=true
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        -e) ENABLE=true ;;
-        -d) ENABLE=false ;;
+        -e) ENABLE=true;TOGGLE=false ;;
+        -d) ENABLE=false;TOGGLE=false ;;
+        -o) OPTION=true;TOGGLE=false ;;
         -s|--device) DEVICE="$2"; shift ;;
         -h|--help) echo $USAGE; exit 0 ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
@@ -16,8 +18,35 @@ done
 
 DEVICE=$(getDevice)
 
+VALUE_OFF="com.android.talkback/com.google.android.marvin.talkback.TalkBackService"
+VALUE_ON="com.google.android.marvin.talkback/com.google.android.marvin.talkback.TalkBackService"
+
+if [ "$TOGGLE" = true ]; then
+  STATUS=$(adb -s "$DEVICE" shell settings get secure enabled_accessibility_services)
+  if [ "$STATUS" = "$VALUE_OFF" ]; then
+    ENABLE=true
+  else
+    ENABLE=false
+  fi
+fi
+
+if [ "$OPTION" = true ]; then
+  adb -s "$DEVICE" shell am start -n com.google.android.marvin.talkback/com.android.talkback.TalkBackPreferencesActivity
+fi
+
 if [ "$ENABLE" = true ]; then
-  adb -s "$DEVICE" shell settings put secure enabled_accessibility_services com.google.android.marvin.talkback/com.google.android.marvin.talkback.TalkBackService
+  adb -s "$DEVICE" shell settings put secure enabled_accessibility_services $VALUE_ON
+  INPUT_DEVICE="/dev/input/event1" # VOLUME KEYS EVENT FILE
+  VOLUME_DOWN=114 #0x0072
+  VOLUME_UP=115   #0x0073
+  BLANK_EVENT="sendevent $INPUT_DEVICE 0 0 0"
+
+  INST_DN="sendevent $INPUT_DEVICE 1 $VOLUME_DOWN 1 && $BLANK_EVENT && sendevent $INPUT_DEVICE 1 $VOLUME_UP 1 && $BLANK_EVENT"
+  INST_UP="sendevent $INPUT_DEVICE 1 $VOLUME_DOWN 0 && $BLANK_EVENT && sendevent $INPUT_DEVICE 1 $VOLUME_UP 0 && $BLANK_EVENT"
+
+  adb -s "$DEVICE" shell "$INST_DN"
+  sleep 3
+  adb -s "$DEVICE" shell "$INST_UP"
 else
-  adb -s "$DEVICE" shell am force-stop com.google.android.marvin.talkback
+  adb -s "$DEVICE" shell settings put secure enabled_accessibility_services $VALUE_OFF
 fi
