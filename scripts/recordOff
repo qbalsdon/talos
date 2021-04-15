@@ -1,0 +1,27 @@
+#!/bin/bash
+EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $EXEC_DIR/utils
+USAGE="recordOff"
+#defaults
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -h|--help) echo $USAGE; exit 0 ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
+DATE=$(date '+%y-%m-%d_%H-%M')
+TEMP_DIR=${TMPDIR}
+RECORING_FILE=${TEMP_DIR}recording.mp4
+PROCESS_ID=${TEMP_DIR}processId
+
+if test -f "$RECORING_FILE"; then
+    kill $(cat $PROCESS_ID)
+    DESTINATION=~/Desktop/REC_${DATE}.mp4
+    mv $RECORING_FILE $DESTINATION
+    echo "  ~~> File moved to [$DESTINATION]"
+    rm -f $PROCESS_ID
+else
+    echo "  ~~> Not recording"
+fi

@@ -18,8 +18,14 @@ Reset VNC `sudo Xvnc -generatekeys force`
 https://gist.github.com/kibotu/849ea0f113f0093ea14a90f373f7eb1e
 https://raspberrypi.stackexchange.com/questions/44005/how-do-i-install-the-android-debug-bridge-adb-on-a-raspberry-pi
 
+### [Useful ADB commands][0]
+
+1. `adb shell settings list [secure|global|system]`
+
+This is the manner in which developers can see what is available for modification on the system normally it may be retrieved by calling: `adb shell settings get [secure|global|system] [name]` and set by calling `adb shell settings put [secure|global|system] [name] [value]`
+
 ## SCRCPY
-https://github.com/Genymobile/scrcpy/blob/master/BUILD.md \
+https://github.com/Genymobile/scrcpy/blob/master/BUILD.md
 DO NOT BUILD THE SERVER, THAT REQUIRES THE SDK
 
 ## Keyboard shortcuts
@@ -33,3 +39,5 @@ DO NOT BUILD THE SERVER, THAT REQUIRES THE SDK
 sudo rm -rf /usr/local/bin/scrcpy
 sudo rm -rf /usr/local/share/scrcpy/scrcpy-server
 ```
+
+[0]: https://adbinstaller.com/commands/adb-shell-settings-5b670d5ee7958178a2955536

@@ -39,4 +39,4 @@ else
 fi
 
 adb -s "$DEVICE" shell settings put secure ui_night_mode $VALUE
-adb -s "$DEVICE" reboot
+# adb -s "$DEVICE" reboot

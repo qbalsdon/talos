@@ -61,7 +61,7 @@
 					<key>COMMAND_STRING</key>
 					<string>source ~/.bash_profile 
 export PATH="$PATH:/usr/local/Cellar/scrcpy/$SCRCPY_VERSION/bin/"
-sh talkback</string>
+sh flip</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>
@@ -86,7 +86,7 @@ sh talkback</string>
 				<key>Class Name</key>
 				<string>RunShellScriptAction</string>
 				<key>InputUUID</key>
-				<string>8F5A3CBD-D93C-4AA9-90DD-021E1B09D65B</string>
+				<string>58E27C79-C3A3-4EBE-AAAC-AE007A122776</string>
 				<key>Keywords</key>
 				<array>
 					<string>Shell</string>
@@ -96,9 +96,9 @@ sh talkback</string>
 					<string>Unix</string>
 				</array>
 				<key>OutputUUID</key>
-				<string>1253FA0F-9177-4EE2-9E53-B245FF8E1C14</string>
+				<string>2E4E2C3F-1476-4DB8-857C-C3C5B12363D9</string>
 				<key>UUID</key>
-				<string>7A1D0EB9-A118-4CC4-964E-14AB4AAE325C</string>
+				<string>12423BBE-7F76-4574-BA0C-BB19B1BDE362</string>
 				<key>UnlocalizedApplications</key>
 				<array>
 					<string>Automator</string>
@@ -171,6 +171,8 @@ sh talkback</string>
 						<string>4</string>
 					</dict>
 				</dict>
+				<key>conversionLabel</key>
+				<integer>0</integer>
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>

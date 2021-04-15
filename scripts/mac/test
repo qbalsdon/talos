@@ -1,21 +1,21 @@
 #!/bin/bash
 EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-device="/dev/input/event3"
-ALT_KEY=133 #KEYCODE_ALT_LEFT
-LEFT_KEY=216 #KEYCODE_DPAD_RIGHT
-RIGHT_KEY=215 #KEYCODE_DPAD_RIGHT
+# INPUT_DEVICE="/dev/input/event1" # VOLUME KEYS EVENT FILE
+# VOLUME_DOWN=114 #0x0072
+# VOLUME_UP=115   #0x0073
+# BLANK_EVENT="sendevent $INPUT_DEVICE 0 0 0"
+#
+# INST_DN="sendevent $INPUT_DEVICE 1 $VOLUME_DOWN 1 && $BLANK_EVENT && sendevent $INPUT_DEVICE 1 $VOLUME_UP 1 && $BLANK_EVENT"
+# INST_UP="sendevent $INPUT_DEVICE 1 $VOLUME_DOWN 0 && $BLANK_EVENT && sendevent $INPUT_DEVICE 1 $VOLUME_UP 0 && $BLANK_EVENT"
+#
+# adb -s "$DEVICE" shell "$INST_DN"
+# sleep 3
+# adb -s "$DEVICE" shell "$INST_UP"
 
-BLANK_EVENT="sendevent $device 0 0 0"
-
-HOLD=$ALT_KEY
-REF_KEY=$RIGHT_KEY
-
-INST_DN="sendevent $device 1 $HOLD 1    && $BLANK_EVENT && sendevent $device 1 $REF_KEY 1 && $BLANK_EVENT"
-INST_UP="sendevent $device 1 $REF_KEY 0 && $BLANK_EVENT && sendevent $device 1 $HOLD 0    && $BLANK_EVENT"
-
-adb shell "$INST_DN"
-sleep 1
-adb shell "$INST_UP"
+adb shell sendevent /dev/input/event1 1 116 1
+adb shell sendevent /dev/input/event1 0 0 0
+adb shell sendevent /dev/input/event1 1 116 0
+adb shell sendevent /dev/input/event1 0 0 0
 
 #adb shell "input keyevent $ALT_KEY & input keyevent $RIGHT_KEY"

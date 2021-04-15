@@ -1,0 +1,79 @@
+#!/bin/bash
+EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $EXEC_DIR/utils
+USAGE="sysDiff [-s device -o outputFile]"
+#defaults
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -o|--output) OUTPUT_FILE="$2"; shift ;;
+        -s|--device) DEVICE="$2"; shift ;;
+        -h|--help) echo $USAGE; exit 0 ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
+DEVICE=$(getDevice)
+
+TEMP_DIR=${TMPDIR}
+
+LOGCAT_FILE="${TEMP_DIR}logcat"
+SECURE_FILE1="${TEMP_DIR}secure1"
+GLOBAL_FILE1="${TEMP_DIR}global1"
+SYSTEM_FILE1="${TEMP_DIR}system1"
+adb -s $DEVICE shell settings list secure > $SECURE_FILE1
+adb -s $DEVICE shell settings list global > $GLOBAL_FILE1
+adb -s $DEVICE shell settings list system > $SYSTEM_FILE1
+
+adb -s $DEVICE logcat -c
+adb -s $DEVICE logcat > $LOGCAT_FILE & ID=$!
+
+echo " ~~~~ !! INTERACTION REQUIRED !! ~~~~ "
+echo "  Perform your action on the device"
+echo "       LOGCAT PROCESS ID: $ID"
+read -n 1 -s -r -p "     and press a key when done"
+echo ""
+kill $ID
+
+SECURE_FILE2="${TEMP_DIR}secure2"
+GLOBAL_FILE2="${TEMP_DIR}global2"
+SYSTEM_FILE2="${TEMP_DIR}system2"
+adb -s $DEVICE shell settings list secure > $SECURE_FILE2
+adb -s $DEVICE shell settings list global > $GLOBAL_FILE2
+adb -s $DEVICE shell settings list system > $SYSTEM_FILE2
+
+if [ -z $OUTPUT_FILE ] ; then
+  echo "!> [secure] changes"
+  grep -v -F -x -f $SECURE_FILE1 $SECURE_FILE2
+  echo "--------------------------------------"
+  echo "!> [global] changes"
+  grep -v -F -x -f $GLOBAL_FILE1 $GLOBAL_FILE2
+  echo "--------------------------------------"
+  echo "!> [system] changes"
+  grep -v -F -x -f $SYSTEM_FILE1 $SYSTEM_FILE2
+  echo "--------------------------------------"
+  echo "!> [logcat] during interaction"
+  cat  $LOGCAT_FILE
+  echo "--------------------------------------"
+else
+  echo "!> [secure] changes"                    >  $OUTPUT_FILE
+  grep -v -F -x -f $SECURE_FILE1 $SECURE_FILE2  >> $OUTPUT_FILE
+  echo "--------------------------------------" >> $OUTPUT_FILE
+  echo "!> [global] changes"                    >> $OUTPUT_FILE
+  grep -v -F -x -f $GLOBAL_FILE1 $GLOBAL_FILE2  >> $OUTPUT_FILE
+  echo "--------------------------------------" >> $OUTPUT_FILE
+  echo "!> [system] changes"                    >> $OUTPUT_FILE
+  grep -v -F -x -f $SYSTEM_FILE1 $SYSTEM_FILE2  >> $OUTPUT_FILE
+  echo "--------------------------------------" >> $OUTPUT_FILE
+  echo "!> [logcat] during interaction"         >> $OUTPUT_FILE
+  cat  $LOGCAT_FILE                             >> $OUTPUT_FILE
+  echo "--------------------------------------" >> $OUTPUT_FILE
+fi
+
+rm $LOGCAT_FILE
+rm $SECURE_FILE1
+rm $SECURE_FILE2
+rm $GLOBAL_FILE1
+rm $GLOBAL_FILE2
+rm $SYSTEM_FILE1
+rm $SYSTEM_FILE2

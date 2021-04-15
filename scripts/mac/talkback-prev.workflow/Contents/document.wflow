@@ -60,7 +60,7 @@
 				<dict>
 					<key>COMMAND_STRING</key>
 					<string>source ~/.bash_profile 
-export PATH="$PATH:/usr/local/Cellar/scrcpy/1.16_2/bin/"
+export PATH="$PATH:/usr/local/Cellar/scrcpy/$SCRCPY_VERSION/bin/"
 adb shell am broadcast -a com.balsdon.talkback.accessibility -e ACTION "ACTION_PREV"</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
@@ -171,8 +171,6 @@ adb shell am broadcast -a com.balsdon.talkback.accessibility -e ACTION "ACTION_P
 						<string>4</string>
 					</dict>
 				</dict>
-				<key>conversionLabel</key>
-				<integer>0</integer>
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>

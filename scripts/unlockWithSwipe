@@ -23,3 +23,4 @@ fi
 . $EXEC_DIR/powerPress -s $DEVICE
 adb -s $DEVICE shell input swipe 200 900 200 300 #swipe up
 adb -s $DEVICE shell input text "$PASSWORD"
+adb -s $DEVICE shell input keyevent KEYCODE_ENTER

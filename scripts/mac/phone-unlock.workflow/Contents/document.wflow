@@ -61,7 +61,7 @@
 					<key>COMMAND_STRING</key>
 					<string>pkill scrcpy
 source ~/.bash_profile 
-export PATH="$PATH:/usr/local/Cellar/scrcpy/1.16_2/bin/"
+export PATH="$PATH:/usr/local/Cellar/scrcpy/$SCRCPY_VERSION/bin/"
 sh unlockWithSwipe -p 314159
 nohup scrcpy -Sw &amp;</string>
 					<key>CheckedForUserDefaultShell</key>
@@ -176,7 +176,7 @@ nohup scrcpy -Sw &amp;</string>
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>309.000000:485.000000</string>
+				<string>309.000000:305.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
