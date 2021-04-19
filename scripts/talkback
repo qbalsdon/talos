@@ -21,7 +21,7 @@ DEVICE=$(getDevice)
 
 VALUE_OFF="com.android.talkback/com.google.android.marvin.talkback.TalkBackService"
 TALKBACK="com.google.android.marvin.talkback/com.google.android.marvin.talkback.TalkBackService"
-ALLYSERVICE="com.balsdon.AccessibilityDeveloperService/.AccessibilityDeveloperService"
+ALLYSERVICE="com.balsdon.accessibilityDeveloperService/.AccessibilityDeveloperService"
 VALUE_ON="$TALKBACK:$ALLYSERVICE"
 
 if [ "$TOGGLE" = true ]; then
