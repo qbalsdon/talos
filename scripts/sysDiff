@@ -1,12 +1,14 @@
 #!/bin/bash
 EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $EXEC_DIR/utils
-USAGE="sysDiff [-s device -o outputFile]"
+USAGE="sysDiff [-s device] [-o outputFile] [-l logcat]"
 #defaults
+INCLUDELOGS=false
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -o|--output) OUTPUT_FILE="$2"; shift ;;
         -s|--device) DEVICE="$2"; shift ;;
+        -l|--logcat) INCLUDELOGS=true ;;
         -h|--help) echo $USAGE; exit 0 ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
@@ -52,9 +54,11 @@ if [ -z $OUTPUT_FILE ] ; then
   echo "!> [system] changes"
   grep -v -F -x -f $SYSTEM_FILE1 $SYSTEM_FILE2
   echo "--------------------------------------"
-  echo "!> [logcat] during interaction"
-  cat  $LOGCAT_FILE
-  echo "--------------------------------------"
+  if [ "$INCLUDELOGS" = true ]; then
+    echo "!> [logcat] during interaction"
+    cat  $LOGCAT_FILE
+    echo "--------------------------------------"
+  fi
 else
   echo "!> [secure] changes"                    >  $OUTPUT_FILE
   grep -v -F -x -f $SECURE_FILE1 $SECURE_FILE2  >> $OUTPUT_FILE
@@ -65,9 +69,11 @@ else
   echo "!> [system] changes"                    >> $OUTPUT_FILE
   grep -v -F -x -f $SYSTEM_FILE1 $SYSTEM_FILE2  >> $OUTPUT_FILE
   echo "--------------------------------------" >> $OUTPUT_FILE
-  echo "!> [logcat] during interaction"         >> $OUTPUT_FILE
-  cat  $LOGCAT_FILE                             >> $OUTPUT_FILE
-  echo "--------------------------------------" >> $OUTPUT_FILE
+  if [ "$INCLUDELOGS" = true ]; then
+    echo "!> [logcat] during interaction"         >> $OUTPUT_FILE
+    cat  $LOGCAT_FILE                             >> $OUTPUT_FILE
+    echo "--------------------------------------" >> $OUTPUT_FILE
+  fi
 fi
 
 rm $LOGCAT_FILE

@@ -61,7 +61,7 @@
 					<key>COMMAND_STRING</key>
 					<string>source ~/.bash_profile 
 export PATH="$PATH:/usr/local/Cellar/scrcpy/$SCRCPY_VERSION/bin/"
-adb shell am broadcast -a com.balsdon.talkback.accessibility -e ACTION "ACTION_NEXT"</string>
+adb -d shell am broadcast -a com.balsdon.talkback.accessibility -e ACTION "ACTION_SWIPE_RIGHT"</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>

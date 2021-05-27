@@ -17,26 +17,42 @@ done
 
 DEVICE=$(getDevice)
 
-VALUE_OFF="1"
-VALUE_ON="2"
+# I can do this when I figure out how to make the system refresh
+# VALUE_OFF="1"
+# VALUE_ON="2"
+#
+# if [ "$TOGGLE" = true ]; then
+#   STATUS=$(adb -s "$DEVICE" shell settings get secure ui_night_mode)
+#   echo "  ~~> CURRENT STATUS: [$STATUS]"
+#   if [ "$STATUS" = "$VALUE_OFF" ]; then
+#     echo "    |--> ENABLING [$VALUE_ON]"
+#     ENABLE=true
+#   else
+#     ENABLE=false
+#     echo "    |--> DISABLING [$VALUE_OFF]"
+#   fi
+# fi
+#
+# if [ "$ENABLE" = true ]; then
+#   VALUE=$VALUE_ON
+# else
+#   VALUE=$VALUE_OFF
+# fi
+#
+# adb -s "$DEVICE" shell settings put secure ui_night_mode $VALUE
+
+# adb -s "$DEVICE" shell am start -a android.settings.DISPLAY_SETTINGS
+adb shell am start -a android.settings.DISPLAY_SETTINGS
 
 if [ "$TOGGLE" = true ]; then
-  STATUS=$(adb -s "$DEVICE" shell settings get secure ui_night_mode)
-  echo "  ~~> CURRENT STATUS: [$STATUS]"
-  if [ "$STATUS" = "$VALUE_OFF" ]; then
-    echo "    |--> ENABLING [$VALUE_ON]"
-    ENABLE=true
-  else
-    ENABLE=false
-    echo "    |--> DISABLING [$VALUE_OFF]"
+  sh tap -s "$DEVICE"  -e switchWidget
+else
+  STATUS=$(sh propertyOf -e switchWidget -p checked)
+  if [ $ENABLE = true ] && [ $STATUS = false ]; then
+    sh tap -s "$DEVICE"  -e switchWidget
+  fi
+  if [ $ENABLE = false ] && [ $STATUS = true ]; then
+    sh tap -s "$DEVICE" -e switchWidget
   fi
 fi
-
-if [ "$ENABLE" = true ]; then
-  VALUE=$VALUE_ON
-else
-  VALUE=$VALUE_OFF
-fi
-
-adb -s "$DEVICE" shell settings put secure ui_night_mode $VALUE
-# adb -s "$DEVICE" reboot
+adb -s "$DEVICE" shell input keyevent KEYCODE_BACK

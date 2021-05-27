@@ -1,3 +1,3 @@
 #!/bin/sh
 
-cp /Users/quba/Library/Services/*.workflow .
+cp -R /Users/quba/Library/Services/*.workflow .

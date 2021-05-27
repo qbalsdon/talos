@@ -169,5 +169,10 @@ sudo rm -rf /usr/local/bin/scrcpy
 sudo rm -rf /usr/local/share/scrcpy/scrcpy-server
 ```
 
+#### TODO:
+1. Take screenshot, go to darkMode, take screenshot
+1. Start recording, execute script, stop recording. Toggle darkMode, start recording, execute script, stop recording
+1. Make a recording with talkback
+
 [0]: https://adbinstaller.com/commands/adb-shell-settings-5b670d5ee7958178a2955536
 [1]: https://www.automatetheplanet.com/adb-cheat-sheet/

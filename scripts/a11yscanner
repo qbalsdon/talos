@@ -1,7 +1,7 @@
 #!/bin/bash
 EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $EXEC_DIR/utils
-USAGE="talkback [-s device] [-e|-d|-o]"
+USAGE="a11yscanner [-s device] [-e|-d|-o]"
 # talkback code: https://github.com/google/talkback
 #defaults
 TOGGLE=true
@@ -22,7 +22,8 @@ DEVICE=$(getDevice)
 VALUE_OFF="com.android.talkback/com.google.android.marvin.talkback.TalkBackService"
 TALKBACK="com.google.android.marvin.talkback/com.google.android.marvin.talkback.TalkBackService"
 ALLYSERVICE="com.balsdon.accessibilityDeveloperService/.AccessibilityDeveloperService"
-VALUE_ON="$TALKBACK:$ALLYSERVICE"
+ALLYSCANNER="com.google.android.apps.accessibility.auditor/com.google.android.apps.accessibility.auditor.ScannerService"
+VALUE_ON="$ALLYSCANNER:$VALUE_OFF"
 
 if [ "$TOGGLE" = true ]; then
   STATUS=$(adb -s "$DEVICE" shell settings get secure enabled_accessibility_services)

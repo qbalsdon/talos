@@ -1,15 +1,17 @@
 #!/bin/bash
 EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $EXEC_DIR/utils
-USAGE="talkback [-s device] [-e|-d|-o]"
+USAGE="switchAccess [-s device] [-e|-d|-o] [-a]"
 # talkback code: https://github.com/google/talkback
 #defaults
 TOGGLE=true
+VOICE=false
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -e) ENABLE=true;TOGGLE=false ;;
         -d) ENABLE=false;TOGGLE=false ;;
         -o) OPTION=true;TOGGLE=false ;;
+        -a) VOICE=true ;;
         -s|--device) DEVICE="$2"; shift ;;
         -h|--help) echo $USAGE; exit 0 ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
@@ -22,7 +24,12 @@ DEVICE=$(getDevice)
 VALUE_OFF="com.android.talkback/com.google.android.marvin.talkback.TalkBackService"
 TALKBACK="com.google.android.marvin.talkback/com.google.android.marvin.talkback.TalkBackService"
 ALLYSERVICE="com.balsdon.accessibilityDeveloperService/.AccessibilityDeveloperService"
-VALUE_ON="$TALKBACK:$ALLYSERVICE"
+SWITCHACCESS="com.google.android.marvin.talkback/com.android.switchaccess.SwitchAccessService"
+if [ "$VOICE" = true ]; then
+  VALUE_ON="$TALKBACK:$SWITCHACCESS"
+else
+  VALUE_ON="$VALUE_OFF:$SWITCHACCESS"
+fi
 
 if [ "$TOGGLE" = true ]; then
   STATUS=$(adb -s "$DEVICE" shell settings get secure enabled_accessibility_services)
@@ -34,14 +41,19 @@ if [ "$TOGGLE" = true ]; then
 fi
 
 if [ "$OPTION" = true ]; then
-  adb -s "$DEVICE" shell am start -n com.google.android.marvin.talkback/com.android.talkback.TalkBackPreferencesActivity
+  adb -s "$DEVICE" shell am start -n com.google.android.marvin.talkback/com.google.android.accessibility.switchaccess.preferences.SwitchAccessPreferenceActivity
   exit 0
 fi
 
 if [ "$ENABLE" = true ]; then
   adb -s "$DEVICE" shell settings put secure enabled_accessibility_services $VALUE_ON
-  adb -s "$DEVICE" shell settings put secure accessibility_enabled 1
+  adb -s "$DEVICE" shell settings put secure accessibility_enabled 0
+  adb -s "$DEVICE" shell settings put secure accessibility_soft_keyboard_mode 0
+  adb -s "$DEVICE" shell settings put secure show_ime_with_hard_keyboard 1
+
 else
   adb -s "$DEVICE" shell settings put secure enabled_accessibility_services $VALUE_OFF
-  adb -s "$DEVICE" shell settings put secure accessibility_enabled 0
+  adb -s "$DEVICE" shell settings put secure accessibility_enabled 1
+  adb -s "$DEVICE" shell settings put secure accessibility_soft_keyboard_mode 2
+  adb -s "$DEVICE" shell settings put secure show_ime_with_hard_keyboard 0
 fi

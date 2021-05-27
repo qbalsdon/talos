@@ -61,13 +61,31 @@
 					<key>COMMAND_STRING</key>
 					<string>source ~/.bash_profile 
 export PATH="$PATH:/usr/local/Cellar/scrcpy/$SCRCPY_VERSION/bin/"
-adb shell am broadcast -a com.balsdon.talkback.accessibility -e ACTION "ACTION_SWIPE_LEFT"</string>
+
+RESULT="$(osascript -e 'display dialog "Element to select" default answer "" buttons {"ID", "Text", "Cancel"} default button "ID"')"
+
+echo "[$RESULT]"
+
+if [[ "$RESULT" == *"button returned:ID"* ]]; then
+  # echo "$RESULT" | rev | cut -d "button returned:Ok, text returned:" -f1
+  REMOVE="button returned:ID, text returned:"
+  ID=`echo ${RESULT#${REMOVE}}`
+  adb -d shell am broadcast -a com.balsdon.talkback.accessibility -e ACTION "ACTION_FOCUS_ELEMENT" -e PARAMETER_ID "$ID"
+elif [[ "$RESULT" == *"button returned:Text"* ]]; then
+  # echo "$RESULT" | rev | cut -d "button returned:Ok, text returned:" -f1
+  REMOVE="button returned:Text, text returned:"
+  TEXT=`echo ${RESULT#${REMOVE}}`
+  adb -d shell am broadcast -a com.balsdon.talkback.accessibility -e ACTION "ACTION_FOCUS_ELEMENT" -e PARAMETER_TEXT "$TEXT"
+else
+  adb -d shell am broadcast -a com.balsdon.talkback.accessibility -e ACTION "TOAST" -e PARAMETER_TEXT "Cancelled"
+fi
+</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>
 					<integer>0</integer>
 					<key>shell</key>
-					<string>/bin/sh</string>
+					<string>/bin/zsh</string>
 					<key>source</key>
 					<string></string>
 				</dict>
@@ -86,7 +104,7 @@ adb shell am broadcast -a com.balsdon.talkback.accessibility -e ACTION "ACTION_S
 				<key>Class Name</key>
 				<string>RunShellScriptAction</string>
 				<key>InputUUID</key>
-				<string>6555B695-78BB-4BDC-A05B-9CC10781EF53</string>
+				<string>1B6833EB-62BE-48C1-8EF6-EC04C8D58DBE</string>
 				<key>Keywords</key>
 				<array>
 					<string>Shell</string>
@@ -96,9 +114,9 @@ adb shell am broadcast -a com.balsdon.talkback.accessibility -e ACTION "ACTION_S
 					<string>Unix</string>
 				</array>
 				<key>OutputUUID</key>
-				<string>AAD4B78F-D0B6-4E68-8725-D21CA96E8AD7</string>
+				<string>0778FC29-C3F6-43EF-9F8F-97FA9C1C7717</string>
 				<key>UUID</key>
-				<string>9CD933B9-8389-42AA-A623-503690EED64B</string>
+				<string>20A0551F-2528-462D-AFEB-8D8DEBD1A898</string>
 				<key>UnlocalizedApplications</key>
 				<array>
 					<string>Automator</string>
@@ -171,6 +189,8 @@ adb shell am broadcast -a com.balsdon.talkback.accessibility -e ACTION "ACTION_S
 						<string>4</string>
 					</dict>
 				</dict>
+				<key>conversionLabel</key>
+				<integer>0</integer>
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
@@ -191,7 +211,7 @@ adb shell am broadcast -a com.balsdon.talkback.accessibility -e ACTION "ACTION_S
 		<key>applicationPaths</key>
 		<array/>
 		<key>inputTypeIdentifier</key>
-		<string>com.apple.Automator.nothing</string>
+		<string>com.apple.Automator.text</string>
 		<key>outputTypeIdentifier</key>
 		<string>com.apple.Automator.nothing</string>
 		<key>presentationMode</key>
@@ -199,7 +219,7 @@ adb shell am broadcast -a com.balsdon.talkback.accessibility -e ACTION "ACTION_S
 		<key>processesInput</key>
 		<integer>0</integer>
 		<key>serviceInputTypeIdentifier</key>
-		<string>com.apple.Automator.nothing</string>
+		<string>com.apple.Automator.text</string>
 		<key>serviceOutputTypeIdentifier</key>
 		<string>com.apple.Automator.nothing</string>
 		<key>serviceProcessesInput</key>

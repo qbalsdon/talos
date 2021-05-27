@@ -61,13 +61,13 @@
 					<key>COMMAND_STRING</key>
 					<string>source ~/.bash_profile 
 export PATH="$PATH:/usr/local/Cellar/scrcpy/$SCRCPY_VERSION/bin/"
-adb shell am broadcast -a com.balsdon.talkback.accessibility -e ACTION "ACTION_SWIPE_LEFT"</string>
+adb shell input keyevent KEYCODE_HOME</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>
 					<integer>0</integer>
 					<key>shell</key>
-					<string>/bin/sh</string>
+					<string>/bin/zsh</string>
 					<key>source</key>
 					<string></string>
 				</dict>
@@ -86,7 +86,7 @@ adb shell am broadcast -a com.balsdon.talkback.accessibility -e ACTION "ACTION_S
 				<key>Class Name</key>
 				<string>RunShellScriptAction</string>
 				<key>InputUUID</key>
-				<string>6555B695-78BB-4BDC-A05B-9CC10781EF53</string>
+				<string>408F5D0E-0177-4951-A0AA-F38B35E0BBE5</string>
 				<key>Keywords</key>
 				<array>
 					<string>Shell</string>
@@ -96,9 +96,9 @@ adb shell am broadcast -a com.balsdon.talkback.accessibility -e ACTION "ACTION_S
 					<string>Unix</string>
 				</array>
 				<key>OutputUUID</key>
-				<string>AAD4B78F-D0B6-4E68-8725-D21CA96E8AD7</string>
+				<string>DBEB012D-B529-4B59-B3D0-D215AD15D996</string>
 				<key>UUID</key>
-				<string>9CD933B9-8389-42AA-A623-503690EED64B</string>
+				<string>30A32D10-6757-4BFF-8B8B-CE01D4EB356D</string>
 				<key>UnlocalizedApplications</key>
 				<array>
 					<string>Automator</string>
@@ -171,6 +171,8 @@ adb shell am broadcast -a com.balsdon.talkback.accessibility -e ACTION "ACTION_S
 						<string>4</string>
 					</dict>
 				</dict>
+				<key>conversionLabel</key>
+				<integer>0</integer>
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>

@@ -1,0 +1,36 @@
+#!/bin/bash
+EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $EXEC_DIR/utils
+
+USAGE="propertyOf -e ELEMENT_NAME [-s DEVICE] [-f|-x XML_RESOURCE] -p|--property PROPERTY"
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -f|--file) XMLFILE="$2"; shift ;;
+        -x|--xml) XML="$2"; shift ;;
+        -e|--element) ELEMENT="$2"; shift ;;
+        -s|--device) DEVICE="$2"; shift ;;
+        -p|--property) PROPERTY="$2"; shift ;;
+        -h|--help) echo $USAGE; exit 0 ;;
+        *) echo "Unknown parameter passed: $1. Usage: $USAGE"; exit 1 ;;
+    esac
+    shift
+done
+
+DEVICE=$(getDevice)
+
+if [ -z "$ELEMENT" ]; then
+  echo "~~ No element given, use -e [ELEMENT NAME] ~~"
+  exit -1
+fi
+
+if [ -z "$XML" ]; then
+  if [ -z "$XMLFILE" ]; then
+    XML=$(sh $EXEC_DIR/fetchUI -s $DEVICE)
+  else
+    XML=$(cat $XMLFILE)
+  fi
+fi
+
+P_VALUE=$(echo "$XML" | grep "$ELEMENT" | sed "s/^.*$PROPERTY=\"//" | cut -f1 -d"\"")
+
+echo "$P_VALUE"
