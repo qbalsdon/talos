@@ -2,7 +2,7 @@
 EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $EXEC_DIR/utils
 
-USAGE="fetchUI [-o OUTPUTFILE] [-s DEVICE]"
+USAGE="fetchUI [-s DEVICE] [-o OUTPUTFILE]"
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -o|--outputFile) outputFile="$2"; shift ;;

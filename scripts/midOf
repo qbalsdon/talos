@@ -2,7 +2,7 @@
 EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $EXEC_DIR/utils
 
-USAGE="midOf -e ELEMENT_NAME [-s DEVICE] [-f|-x XML_RESOURCE] "
+USAGE="midOf -e ELEMENT_NAME [-s DEVICE] [-f|-x XML_RESOURCE]"
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -f|--file) XMLFILE="$2"; shift ;;
