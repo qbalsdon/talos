@@ -11,11 +11,9 @@ midOf_usage="""
 
 def validateArgs(options):
     if options == None or "element" not in options and "property" not in options:
-        print("Required parameter(s) missing USAGE:"+midOf_usage)
-        return False
+        raise ValueError("Required parameter(s) missing USAGE:"+midOf_usage)
     if "property" in options and "value" not in options:
-        print("Required '-v' parameter missing. USAGE:"+midOf_usage)
-        return False
+        raise ValueError("Required '-v' parameter missing. USAGE:"+midOf_usage)
     return True
 
 def midOf(options, uiRoot):
@@ -41,15 +39,16 @@ def midOf(options, uiRoot):
 
     if foundNode == None:
         return None
-    numbers = re.findall('[0-9]+', node.attrib.get("bounds"))
+    numbers = re.findall('[0-9]+', foundNode.attrib.get("bounds"))
     if len(numbers) != 4:
         return None
-    x = int(numbers[2]) - int(numbers[0])
-    y = int(numbers[3]) - int(numbers[1])
+    x = int(numbers[0]) + ((int(numbers[2]) - int(numbers[0])) / 2)
+    y = int(numbers[1]) + ((int(numbers[3]) - int(numbers[1])) / 2)
     return {"x": x, "y": y}
 
 
 if __name__ == "__main__":
     options = proccessArgs()
+    getDevice(options=options)
     uiRoot = parseXML(options = options)
     print(midOf(options, uiRoot))

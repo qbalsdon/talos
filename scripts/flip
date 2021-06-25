@@ -1,12 +1,16 @@
 #!/bin/bash
 EXEC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $EXEC_DIR/utils
-USAGE="flip [-s device]"
+USAGE="flip [-s device] [--portrait | --landscape]"
 #defaults
 TOGGLE=true
+PORTRAIT=false
+LANDSCAPE=false
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -s|--device) DEVICE="$2"; shift ;;
+        --portrait) TOGGLE=false; PORTRAIT=true; LANDSCAPE=false ;;
+        --landscape) TOGGLE=false; PORTRAIT=false; LANDSCAPE=true ;;
         -h|--help) echo $USAGE; exit 0 ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
@@ -21,15 +25,34 @@ adb -s "$DEVICE" shell settings put system accelerometer_rotation 0
 VALUE_P="0"
 VALUE_L="1"
 
+STATUS=$(adb -s "$DEVICE" shell settings get system user_rotation)
+echo "  ~~> CURRENT STATUS: [$STATUS]"
 if [ "$TOGGLE" = true ]; then
-  STATUS=$(adb -s "$DEVICE" shell settings get system user_rotation)
-  echo "  ~~> CURRENT STATUS: [$STATUS]"
   if [ "$STATUS" = "$VALUE_P" ]; then
     echo "    |--> TURNING LANDSCAPE"
     VALUE=$VALUE_L
   else
     echo "    |--> TURNING PORTRAIT"
     VALUE=$VALUE_P
+  fi
+else
+  if [ "$LANDSCAPE" = true ]; then
+    if [ $STATUS = $VALUE_P ]; then
+      echo "    |--> TURNING LANDSCAPE"
+      VALUE=$VALUE_L
+    else
+      echo "     Not changing oritentation"
+      exit 0
+    fi
+  fi
+  if [ "$PORTRAIT" = true ];then
+    if [ $STATUS = $VALUE_L ]; then
+      echo "    |--> TURNING PORTRAIT"
+      VALUE=$VALUE_P
+    else
+      echo "     Not changing oritentation"
+      exit 0
+    fi
   fi
 fi
 

@@ -15,10 +15,11 @@ def addAdb(parameters, device=None):
     return params
 
 def adbCommand(parameters, device=None, output=True):
+    command_params=addAdb(parameters, device)
     if output:
-        return subprocess.run(addAdb(parameters, device), capture_output=True).stdout.decode().strip()
+        return subprocess.run(command_params, capture_output=True).stdout.decode().strip()
     else:
-        subprocess.run(addAdb(parameters, device), capture_output=True)
+        subprocess.run(command_params, capture_output=True)
     return ""
 
 def valueForParam(args, param):
@@ -33,10 +34,12 @@ def proccessArgs(args = None):
     if args == None:
         args = sys.argv
     optionals = {
-        "device" : "-s",
+        "preferredDevice" : "-s",
         "element" : "-e",
         "property" : "-prop",
         "value" : "-v",
+        "file": "-f",
+        "xml": "-x"
     }
     options = {}
 

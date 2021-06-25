@@ -60,7 +60,7 @@ class TestCommon(unittest.TestCase):
 
     def test_process_command_line_args_device(self):
         result = proccessArgs(["caller.py", "-s", "deviceName"])
-        self.assertEqual(result.get("device"), "deviceName")
+        self.assertEqual(result.get("preferredDevice"), "deviceName")
 
     def test_process_command_line_args_no_device(self):
         result = proccessArgs(["caller.py"])

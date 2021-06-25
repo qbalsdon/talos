@@ -100,18 +100,23 @@ class TestGetDevice(unittest.TestCase):
     def test_get_first_real_connected_device_prefer_os_default(self):
         test_input = [{'Name':'emulator-5554','Status':'device'}, {'Name':'13021FDD4005XC_fake','Status':'device'}, {'Name':'13021FDD4005XC_Test','Status':'device'}]
         expected = "13021FDD4005XC_Test"
+        options = {"preferredDevice": "13021FDD4005XC_Test"}
 
-        result = getDevice(deviceList = test_input, preferredDevice=expected)
+        result = getDevice(deviceList = test_input, options=options)
 
+        self.assertEqual(options, {"preferredDevice": "13021FDD4005XC_Test", "device": "13021FDD4005XC_Test"})
         self.assertEqual(result, expected)
 
     def test_get_first_real_connected_device_prefer_os_default_but_default_not_connected(self):
         test_input = [{'Name':'emulator-5554','Status':'device'}, {'Name':'13021FDD4005XC_fake','Status':'device'}, {'Name':'13021FDD4005XC_test','Status':'offline'}]
         expected = "13021FDD4005XC_fake"
 
-        result = getDevice(deviceList = test_input, preferredDevice="13021FDD4005XC_test")
-
-        self.assertEqual(result, expected)
+        try:
+            options = {"preferredDevice": "13021FDD4005XC_Test"}
+            getDevice(deviceList = test_input, options = options)
+            self.fail("getDevice should have thrown ValueError")
+        except Exception as e:
+            self.assertTrue(e.__class__ is ValueError)
 
     #=========================
 

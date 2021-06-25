@@ -42,14 +42,15 @@ def preferredFilter(deviceMap, preferred = None):
     else:
         return False
 
-def getDevice(deviceList = None, preferredDevice = None, options = None):
-    if preferredDevice == None:
-        if options == None:
-            options = proccessArgs()
-        if "device" in options:
-            preferredDevice = options.get("device")
-        else:
-            preferredDevice = os.environ['ADB_DEFAULT'] #TODO: dependency injection!
+def getDevice(deviceList = None, options = None):
+    if options == None:
+        options = proccessArgs()
+
+    if options.get("device") != None:
+        return
+
+    if options.get("preferredDevice") == None:
+        options["preferredDevice"] = os.environ['ADB_DEFAULT'] #TODO: dependency injection!
 
     if deviceList == None:
         deviceList = getConnectedDevices()
@@ -66,16 +67,21 @@ def getDevice(deviceList = None, preferredDevice = None, options = None):
 
     physicalConnectedDevices = list(filter(deviceFilter, connectedDevices))
     if len(physicalConnectedDevices) > 0:
+        preferredDevice = options.get("preferredDevice")
         partialFilter = partial(preferredFilter, preferred=preferredDevice)
         preference = list(filter(partialFilter, physicalConnectedDevices))
         if len(preference) == 1:
-            return preference[0].get('Name')
+            options["device"] = preference[0].get('Name')
+            return options.get("device")
         elif preferredDevice != None:
-            print("!! Prefered device [" + preferredDevice + "] not connected !!")
+            raise ValueError("!! Prefered device [" + preferredDevice + "] not connected !!")
+            return None
 
-        return physicalConnectedDevices[0].get('Name')
+        options["device"] = physicalConnectedDevices[0].get('Name')
+        return options.get("device")
 
-    return connectedDevices[0].get('Name')
+    options["device"] = connectedDevices[0].get('Name')
+    return options.get("device")
 
 def getScreenSize(rawData = None):
     if rawData == None:
