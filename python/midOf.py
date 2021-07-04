@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-from common import *
-from deviceManager import *
-from fetchUI import *
+from simplifier import setUp
+import re
 
 midOf_usage="""
   midOf [-s DEVICE] [-f|-x XML_RESOURCE]
@@ -48,7 +47,5 @@ def midOf(options, uiRoot):
 
 
 if __name__ == "__main__":
-    options = proccessArgs()
-    getDevice(options=options)
-    uiRoot = parseXML(options = options)
+    options, uiRoot = setUp()
     print(midOf(options, uiRoot))

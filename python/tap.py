@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-from common import *
-from deviceManager import *
-from fetchUI import *
-from midOf import *
+from simplifier import setUp
+from common import adbCommand
+from midOf import midOf
 
 tap_usage="""
   tap [-s DEVICE] [-f XML_FILE | -x XML_RESOURCE]
@@ -11,8 +10,7 @@ tap_usage="""
 """
 
 if __name__ == "__main__":
-    options = proccessArgs()
-    uiRoot = parseXML(options = options)
+    options, uiRoot = setUp()
     mid = midOf(options, uiRoot)
     if mid != None:
         adbCommand(["shell", "input", "tap", str(mid.get("x")), str(mid.get("y"))], device=options.get("device"), output=False)

@@ -69,6 +69,6 @@ class TestCommon(unittest.TestCase):
     def test_process_command_line_args_element(self):
         result = proccessArgs(["caller.py", "-e", "elementName", "-s", "deviceName"])
         self.assertEqual(result.get("element"), "elementName")
-
+        
 if __name__ == "__main__":
     unittest.main()
