@@ -2,9 +2,7 @@
 import sys
 from functools import partial
 from simplifier import setUp
-from common import adbSetValue, adbGetValue
-from common import toggle_value
-from enums import orientation
+from common import adbSetValue, adbGetValue, alternator
 
 """
 adb -s __DEVICE__ shell settings put system accelerometer_rotation 0
@@ -17,7 +15,9 @@ flip_usage="""
 """
 
 def validateArgs(arguments=None):
-    if arguments != None or len(arguments) > 0:
+    if arguments == None:
+        return None
+    if len(arguments) > 0:
         if "-s" in arguments:
             pos = arguments.index("-s")
             del arguments[pos + 1]
@@ -25,24 +25,25 @@ def validateArgs(arguments=None):
         if len(arguments) > 1:
             raise ValueError("Illegal combination of arguments. Usage: " + flip_usage)
         if len(arguments) == 0 or "-t" in arguments or "--toggle" in arguments:
-            return orientation.TOGGLE
+            return None
         if "-l" in arguments or "--landscape" in arguments:
-            return orientation.LANDSCAPE
+            return 0
         if "-p" in arguments or "--portrait" in arguments:
-            return orientation.PORTRAIT
+            return 1
         raise ValueError("Illegal argument: " + arguments[0] + ". Usage: " + flip_usage)
-    return orientation.TOGGLE
+    return None
+
+def modifier(str):
+    adbSetValue("system", "user_rotation", str, device)
 
 def get_orientation(device):
-    return adbGetValue("system", "user_rotation", device)
+    return int(adbGetValue("system", "user_rotation", device))
 
-def set_orientation(device, direction_int):
-    adbSetValue("system", "user_rotation", str(direction_int), device)
-
-def flip(direction, device):
-    current_value = int(get_orientation(device))
-    if current_value != int(direction):
-        set_orientation(device, direction.convertToAndroidValue(current_value))
+def flip_dictionary(device):
+    return {
+         0: lambda: modifier("1"), #change from LANDSCAPE to PORTRAIT
+         1: lambda: modifier("0")  #change from PORTRAIT to LANDSCAPE
+    }
 
 if __name__ == "__main__":
     options = setUp(ui_required = False)
@@ -52,4 +53,5 @@ if __name__ == "__main__":
     direction = validateArgs(args)
     #always required
     adbSetValue("system", "accelerometer_rotation", "0", device)
-    flip(direction, device)
+
+    alternator(lambda: get_orientation(device), flip_dictionary(device), direction)

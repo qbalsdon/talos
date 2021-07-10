@@ -60,13 +60,30 @@ def proccessArgs(args = None):
 
     return options
 
-def toggle_value(desired_value, accessor, modifier):
-    current_value = accessor()
-    changed = False
-    if current_value != desired_value:
-        modifier()
-        changed = True
-    return changed
+def alternator(read_function, change_dictionary, desired_value=None):
+    value = read_function()
+    if value == None:
+        raise RuntimeError("read_function requires a return value")
+    if value != desired_value:
+        if desired_value == None:
+            #toggle / strafe
+            keys_array = list(change_dictionary)
+            try:
+                current_index = keys_array.index(value)
+            except Exception as e:
+                output="["
+                for key in keys_array:
+                    output+= str(key) + ": (" + str(type(key)) +"), "
+                print("~~~~> Looking for value " + str(value) + " (" + str(type(value)) + ")" + " in keys:")
+                print(output[:-2] + "]")
+                raise e
+            next_index = (current_index + 1) % len(keys_array)
+            change_dictionary[keys_array[current_index]]()
+        else:
+            change_dictionary[desired_value]()
+        return True
+    else:
+        return False
 
 if __name__ == "__main__":
     print("!! Common is a library !!")

@@ -4,26 +4,18 @@ import sys
 sys.path.append('../../python')
 
 from flip import *
-from enums import orientation
+
 class TestFlip(unittest.TestCase):
-
-# try:
-#     ...
-#     self.fail("...")
-# except Exception as e:
-#     self.assertTrue(e.__class__ is ValueError)
-
     def test_validateArgs_none_returns_toggle(self):
         try:
-            result = validateArgs()
-            self.assertEqual(result, orientation.TOGGLE)
+            self.assertEqual(validateArgs(), None)
         except Exception as e:
             self.fail("Should pass with no arguments")
 
     def test_validateArgs_empty_returns_toggle(self):
         try:
             result = validateArgs([])
-            self.assertEqual(result, orientation.TOGGLE)
+            self.assertEqual(result, None)
         except Exception as e:
             self.fail("Should pass with no arguments")
 
@@ -31,49 +23,49 @@ class TestFlip(unittest.TestCase):
         try:
             #the device could have this name
             result = validateArgs(["-s","--portrait"])
-            self.assertEqual(result, orientation.TOGGLE)
+            self.assertEqual(result, None)
         except Exception as e:
             self.fail("Should pass with no arguments")
 
     def test_validateArgs_toggle_returns_toggle(self):
         try:
             result = validateArgs(["-s","--portrait", "--toggle"])
-            self.assertEqual(result, orientation.TOGGLE)
+            self.assertEqual(result, None)
         except Exception as e:
             self.fail("Should pass with no arguments")
 
     def test_validateArgs_t_returns_toggle(self):
         try:
             result = validateArgs(["-s","--portrait", "-t"])
-            self.assertEqual(result, orientation.TOGGLE)
+            self.assertEqual(result, None)
         except Exception as e:
             self.fail("Should pass with no arguments")
 
     def test_validateArgs_l_returns_landscape(self):
         try:
             result = validateArgs(["-l"])
-            self.assertEqual(result, orientation.LANDSCAPE)
+            self.assertEqual(result, 0)
         except Exception as e:
             self.fail("Should pass with no arguments")
 
     def test_validateArgs_landscape_returns_landscape(self):
         try:
             result = validateArgs(["--landscape"])
-            self.assertEqual(result, orientation.LANDSCAPE)
+            self.assertEqual(result, 0)
         except Exception as e:
             self.fail("Should pass with no arguments")
 
     def test_validateArgs_p_returns_landscape(self):
         try:
             result = validateArgs(["-p"])
-            self.assertEqual(result, orientation.PORTRAIT)
+            self.assertEqual(result, 1)
         except Exception as e:
             self.fail("Should pass with no arguments")
 
     def test_validateArgs_portrait_returns_portrait(self):
         try:
             result = validateArgs(["--portrait"])
-            self.assertEqual(result, orientation.PORTRAIT)
+            self.assertEqual(result, 1)
         except Exception as e:
             self.fail("Should pass with no arguments")
 
