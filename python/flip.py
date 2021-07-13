@@ -27,22 +27,22 @@ def validateArgs(arguments=None):
         if len(arguments) == 0 or "-t" in arguments or "--toggle" in arguments:
             return None
         if "-l" in arguments or "--landscape" in arguments:
-            return 0
-        if "-p" in arguments or "--portrait" in arguments:
             return 1
+        if "-p" in arguments or "--portrait" in arguments:
+            return 0
         raise ValueError("Illegal argument: " + arguments[0] + ". Usage: " + flip_usage)
     return None
 
-def modifier(str):
-    adbSetValue("system", "user_rotation", str, device)
+def modifier(new_value):
+    adbSetValue("system", "user_rotation", new_value, device)
 
 def get_orientation(device):
     return int(adbGetValue("system", "user_rotation", device))
 
 def flip_dictionary(device):
     return {
-         0: lambda: modifier("1"), #change from LANDSCAPE to PORTRAIT
-         1: lambda: modifier("0")  #change from PORTRAIT to LANDSCAPE
+         0: lambda: modifier("0"), #change from LANDSCAPE to PORTRAIT
+         1: lambda: modifier("1")  #change from PORTRAIT to LANDSCAPE
     }
 
 if __name__ == "__main__":

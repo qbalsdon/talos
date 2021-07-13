@@ -22,15 +22,15 @@ class TestAlternator(unittest.TestCase):
         self.hasBeenChanged = True
         self.valueSet = value
 
-    def methodChangeFromFive(self):
-        self.methodCallCount = self.methodCallCount + 1
-        self.hasBeenChanged = True
-        self.valueSet = 7
-
-    def methodChangeFromSeven(self):
+    def methodChangeToFive(self):
         self.methodCallCount = self.methodCallCount + 1
         self.hasBeenChanged = True
         self.valueSet = 5
+
+    def methodChangeToSeven(self):
+        self.methodCallCount = self.methodCallCount + 1
+        self.hasBeenChanged = True
+        self.valueSet = 7
 
     def methodRead(self):
         self.hasBeenRead = True
@@ -47,8 +47,8 @@ class TestAlternator(unittest.TestCase):
         self.hasBeenChanged = False
         self.valueSet = None
         self.lamda_dictionary = {
-             5: self.methodChangeFromFive,
-             7: self.methodChangeFromSeven
+             5: self.methodChangeToFive,
+             7: self.methodChangeToSeven
         }
 
     #actual tests
@@ -79,7 +79,7 @@ class TestAlternator(unittest.TestCase):
         self.assertTrue(result)
         self.assertTrue(self.hasBeenRead)
         self.assertTrue(self.hasBeenChanged)
-        self.assertEqual(self.valueSet, 5)
+        self.assertEqual(self.valueSet, 7)
 
     def test_value_changed_always_when_no_value_sent(self):
         self.valueSet = 5
@@ -93,6 +93,8 @@ class TestAlternator(unittest.TestCase):
         self.assertEqual(self.methodCallCount, 1)
         self.hasBeenRead = False
         self.hasBeenChanged = False
+        self.assertFalse(self.hasBeenRead)
+        self.assertFalse(self.hasBeenChanged)
         result = alternator(self.methodReadDynamic, self.lamda_dictionary)
         self.assertTrue(result)
         self.assertTrue(self.hasBeenRead)

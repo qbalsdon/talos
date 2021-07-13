@@ -78,7 +78,7 @@ def alternator(read_function, change_dictionary, desired_value=None):
                 print(output[:-2] + "]")
                 raise e
             next_index = (current_index + 1) % len(keys_array)
-            change_dictionary[keys_array[current_index]]()
+            change_dictionary[keys_array[next_index]]()
         else:
             change_dictionary[desired_value]()
         return True
