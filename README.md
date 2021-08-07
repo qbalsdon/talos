@@ -26,7 +26,9 @@ This is the manner in which developers can see what is available for modificatio
 
 I have made this a little simpler with my `sysDiff` script.
 
-Really useful [cheatsheet][1]
+Really useful cheatsheets:
+1. [automatetheplanet][1]
+1. [Pulimet/AdbCommands][2]
 
 #### ADB Basics
 
@@ -176,3 +178,4 @@ sudo rm -rf /usr/local/share/scrcpy/scrcpy-server
 
 [0]: https://adbinstaller.com/commands/adb-shell-settings-5b670d5ee7958178a2955536
 [1]: https://www.automatetheplanet.com/adb-cheat-sheet/
+[2]: https://gist.github.com/Pulimet/5013acf2cd5b28e55036c82c91bd56d8

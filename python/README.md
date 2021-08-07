@@ -11,20 +11,26 @@ An attempt at Python TDD.
 1. :white_check_mark: create the alternator structure
 1. :white_check_mark: alternate orientations
 1. :white_check_mark: alternate talkback services
-  1. add switch access?
-1. alternate font size
-1. alternate animations
+   1. add switch access?  
+1. :white_check_mark: alternate font scale
+1. :white_check_mark: alternate RTL
+1. alternate show layout (`adb shell setprop debug.layout true && adb shell service call activity 1599295570` https://susuthapa19961227.medium.com/enable-layout-debugging-in-android-using-adb-64016d755441)
 1. alternate dark mode
+1. alternate animations
 1. alternate colour inversion
 1. alternate show taps
-1. open different menus: accessibility, developer settings
+1. recordOn / recordOff
+1. :white_check_mark: open different menus: accessibility, developer settings
+1. :white_check_mark: Get the current activity on screen
 1. create swipe based on screen size
 1. swipeDownTo
 1. waitFor
 1. unlockWithSwipe
-1. activities: list current activity on screen
-1. recordOn / recordOff
+1. :white_check_mark: activities: list current activity on screen (adb shell dumpsys window | grep mCurrentFocus)
 1. listElements
 1. keycodes
 1. create UI with buttons
 1. draw wireframe UI
+1. display density toggle
+    SECURE
+        display_density_forced [None, 374.0, 540.0, '']

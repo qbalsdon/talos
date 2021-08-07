@@ -35,7 +35,7 @@ def validateArgs(arguments=None):
         return None
 
     if len(arguments) > 1:
-        raise ValueError("Cannot can only have 1 accessibility argument\n    "+accessibility_usage)
+        raise ValueError("Can only have 1 accessibility argument\n    "+accessibility_usage)
 
     valid_args = {
         "-t": None,
