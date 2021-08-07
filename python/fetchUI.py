@@ -3,6 +3,7 @@ from common import *
 from deviceManager import *
 import os
 import xml.etree.cElementTree as ET
+from xml.etree.cElementTree import tostring as XmlToString
 
 def parseXML(data = None, options = None):
     if options != None and "file" in options:
@@ -19,8 +20,7 @@ def removeWindowDump(fileReference, device=None):
     adbCommand(["shell", "rm", "/sdcard/"+fileReference], device, output=False)
 
 def fetchDeviceRawData(options = None):
-    getDevice(options = options)
-    device = options.get("device")
+    device = getDevice(options = options)
     OUT_FILE = "window_dump.xml"
     PHONE_FILE="/sdcard/"+OUT_FILE
     removeWindowDump(PHONE_FILE, device)
@@ -33,4 +33,4 @@ def fetchDeviceRawData(options = None):
     return data
 
 if __name__ == "__main__":
-    print(parseXML())
+    print(XmlToString(parseXML()))
