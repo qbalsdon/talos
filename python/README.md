@@ -4,7 +4,6 @@ An attempt at Python TDD.
 
 ## TODO (Commands):
 
-1. listElements
 1. keycodes
 1. create swipe based on screen size
 1. swipe and swipeDownTo
@@ -33,6 +32,7 @@ An attempt at Python TDD.
 1. :white_check_mark: open different menus: accessibility, developer settings
 1. :white_check_mark: Get the current activity on screen
 1. :white_check_mark: activities: list current activity on screen (adb shell dumpsys window | grep mCurrentFocus)
+1. :white_check_mark: listElements
 
 ## TODO: UI
 

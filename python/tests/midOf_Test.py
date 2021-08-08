@@ -58,5 +58,9 @@ class TestMidOf(unittest.TestCase):
         result = midOf({"property": "resource-id", "value": "volumeLabel"}, parseXML(data = testData))
         self.assertEqual(result, {'x': 539.0, 'y': 797.0})
 
+    def test_midOf_stand_alone(self):
+        result = midOfBounds('[28,1998][1052,2160]')
+        self.assertEqual(result, {'x': 540.0, 'y': 2079.0})
+
 if __name__ == "__main__":
     unittest.main()

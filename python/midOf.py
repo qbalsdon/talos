@@ -15,6 +15,14 @@ def validateArgs(options):
         raise ValueError("Required '-v' parameter missing. USAGE:"+midOf_usage)
     return True
 
+def midOfBounds(bounds):
+    numbers = re.findall('[0-9]+', bounds)
+    if len(numbers) != 4:
+        return None
+    x = int(numbers[0]) + ((int(numbers[2]) - int(numbers[0])) / 2)
+    y = int(numbers[1]) + ((int(numbers[3]) - int(numbers[1])) / 2)
+    return {"x": x, "y": y}
+
 def midOf(options, uiRoot):
     if not validateArgs(options):
         return None
@@ -38,12 +46,7 @@ def midOf(options, uiRoot):
 
     if foundNode == None:
         return None
-    numbers = re.findall('[0-9]+', foundNode.attrib.get("bounds"))
-    if len(numbers) != 4:
-        return None
-    x = int(numbers[0]) + ((int(numbers[2]) - int(numbers[0])) / 2)
-    y = int(numbers[1]) + ((int(numbers[3]) - int(numbers[1])) / 2)
-    return {"x": x, "y": y}
+    return midOfBounds(foundNode.attrib.get("bounds"))
 
 
 if __name__ == "__main__":
