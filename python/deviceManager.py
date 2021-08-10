@@ -47,7 +47,7 @@ def getDevice(deviceList = None, options = None):
         options = proccessArgs()
 
     if options.get("device") != None:
-        return
+        return options.get("device")
 
     if options.get("preferredDevice") == None:
         options["preferredDevice"] = os.environ['ADB_DEFAULT'] #TODO: dependency injection!
@@ -83,9 +83,9 @@ def getDevice(deviceList = None, options = None):
     options["device"] = connectedDevices[0].get('Name')
     return options.get("device")
 
-def getScreenSize(rawData = None):
+def getScreenSize(rawData = None, options = None):
     if rawData == None:
-        rawData = adbCommand(["shell", "wm", "size"], getDevice())
+        rawData = adbCommand(["shell", "wm", "size"], getDevice(options = options))
     sizeArr = re.findall(r"\d+", rawData)
     if len(sizeArr) != 2:
         return None

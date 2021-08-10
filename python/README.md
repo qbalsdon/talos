@@ -4,11 +4,8 @@ An attempt at Python TDD.
 
 ## TODO (Commands):
 
-1. keycodes
-1. create swipe based on screen size
-1. swipe and swipeDownTo
 1. unlockWithSwipe
-1. waitFor
+1. checkOnScreen
 1. alternate dark mode
 1. alternate animations
 1. recordOn / recordOff
@@ -33,6 +30,8 @@ An attempt at Python TDD.
 1. :white_check_mark: Get the current activity on screen
 1. :white_check_mark: activities: list current activity on screen (adb shell dumpsys window | grep mCurrentFocus)
 1. :white_check_mark: listElements
+1. :white_check_mark: keycodes
+1. :white_check_mark: swipe based on screen size
 
 ## TODO: UI
 

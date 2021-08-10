@@ -48,7 +48,8 @@ def proccessArgs(args = None):
         "property" : "-prop",
         "value" : "-v",
         "file": "-f",
-        "xml": "-x"
+        "xml": "-x",
+        "percent": "-p"
     }
 
     options = {}
