@@ -22,6 +22,12 @@ def adbCommand(parameters, device=None, output=True):
         subprocess.run(command_params, capture_output=True)
     return ""
 
+def press_button(keycode, device):
+    adbCommand(["shell", "input", "keyevent", keycode], device)
+
+def type_text(text, device):
+    adbCommand(["shell", "input", "text", text.replace(" ", "\ ")], device)
+
 def adbGetValue(level, variable_name, device=None, output=True):
     command_params=addAdb(["shell", "settings", "get", level, variable_name], device)
     value = subprocess.run(command_params, capture_output=True).stdout.decode().strip()
@@ -49,7 +55,8 @@ def proccessArgs(args = None):
         "value" : "-v",
         "file": "-f",
         "xml": "-x",
-        "percent": "-p"
+        "percent": "-p",
+        "text": "-t"
     }
 
     options = {}

@@ -50,7 +50,11 @@ def getDevice(deviceList = None, options = None):
         return options.get("device")
 
     if options.get("preferredDevice") == None:
-        options["preferredDevice"] = os.environ['ADB_DEFAULT'] #TODO: dependency injection!
+        try:
+            options["preferredDevice"] = os.environ['ADB_DEFAULT'] #TODO: dependency injection!
+        except Exception as e:
+            print("Cannot locate the environment variable ADB_DEFAULT - defaulting to first available device in `adb devices`")
+            pass
 
     if deviceList == None:
         deviceList = getConnectedDevices()

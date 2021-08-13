@@ -5,27 +5,25 @@ from simplifier import setUp
 from common import adbCommand
 from deviceManager import getScreenSize
 
-swipe_usage = "swipe [-s DEVICE] [-u|-d|-l|-r] [-p PERCENT]"
+swipe_usage = "swipe [-s DEVICE] [-u|-d|-l|-r] [-t TEXT]"
 
-def validateArgs(arguments=None):
+def validateArgs(arguments=None, usage = swipe_usage):
     DEFAULT_RETURN = "u"
     if arguments == None:
         return DEFAULT_RETURN
+    binary_args = ["-s", "-t", "-p"]
     if len(arguments) > 0:
-        if "-s" in arguments:
-            pos = arguments.index("-s")
-            del arguments[pos + 1]
-            arguments.remove("-s")
-        if "-p" in arguments:
-            pos = arguments.index("-p")
-            del arguments[pos + 1]
-            arguments.remove("-p")
+        for arg in binary_args:
+            if arg in arguments:
+                pos = arguments.index(arg)
+                del arguments[pos + 1]
+                arguments.remove(arg)
 
     if len(arguments) == 0:
         return DEFAULT_RETURN
 
     if len(arguments) > 1:
-        raise ValueError("Can only have 1 argument\n    " + swipe_usage)
+        raise ValueError("Can only have 1 argument\n    " + usage)
 
     valid_args = {
         "-u": "u",
@@ -35,7 +33,7 @@ def validateArgs(arguments=None):
     }
 
     if arguments[0] not in valid_args:
-        raise ValueError("Argument '" + arguments[0] + " not recognised'\n    " + swipe_usage)
+        raise ValueError("Argument '" + arguments[0] + " not recognised'\n    " + usage)
     return valid_args[arguments[0]]
 
 def percent_length(length, percent):
@@ -65,18 +63,21 @@ def determine_swipe_points(screen_size, direction, percent):
 def perform_swipe(startX, startY, endX, endY, device):
     adbCommand(["shell", "input", "swipe", str(startX), str(startY), str(endX), str(endY)], device)
 
-if __name__ == "__main__":
-    options = setUp(ui_required = False)
+def swipe_device(direction, options, percent = 50):
+    if direction not in ["u","d","l","r"]:
+        raise ValueError("Direction {} not recognised".format(direction))
     device = options.get("device")
-    args = sys.argv
-    del args[0]
-
-    direction = validateArgs(args)
     screen_size = getScreenSize(options = options)
-    percent = 50
     if "percent" in options:
         percent = int(options["percent"])
 
-    print("I am going to swipe {} {}% on {}".format(direction, percent, screen_size))
     x1, x2, y1, y2 = determine_swipe_points(screen_size, direction, percent)
     perform_swipe(x1, x2, y1, y2, device)
+
+if __name__ == "__main__":
+    options = setUp(ui_required = False)
+    args = sys.argv
+    del args[0]
+    direction = validateArgs(args)
+
+    # print("I am going to swipe {} {}% on {}".format(direction, percent, screen_size))
