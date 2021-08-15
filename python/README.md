@@ -4,7 +4,6 @@ An attempt at Python TDD.
 
 ## TODO (Commands):
 
-1. recordOn / recordOff
 1. checkOnScreen
 1. alternate brightness
     adb shell settings put system screen_brightness 0
@@ -37,6 +36,7 @@ An attempt at Python TDD.
 1. :white_check_mark: keycodes
 1. :white_check_mark: swipe based on screen size
 1. :white_check_mark: unlockWithSwipe
+1. :white_check_mark: recordOn / recordOff
 
 ## TODO: UI
 

@@ -5,7 +5,7 @@ from common import adbCommand, press_button, type_text
 from swipe import validateArgs, swipe_device
 
 unlock_usage="""
-  unlockWithSwipe [-s DEVICE] [-u|-d|-l|-r] -t [TEXT_TO_TYPE] [-e]
+  unlockWithSwipe.py [-s DEVICE] [-u|-d|-l|-r] -t [TEXT_TO_TYPE] [-e]
 """
 
 def get_screen_settings(device):
