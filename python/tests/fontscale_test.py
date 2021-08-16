@@ -54,7 +54,7 @@ class TestFontScale(unittest.TestCase):
             "-sm" : 0.85,
             "-small" : 0.85,
             "-d" : 1,
-            "--defaul" : 1,
+            "--default" : 1,
             "-l" : 1.15,
             "--large" : 1.15,
             "-el" : 1.3,

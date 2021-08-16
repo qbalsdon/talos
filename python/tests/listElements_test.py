@@ -2,7 +2,7 @@
 import sys
 sys.path.append('../../python')
 
-from fetchUI import parseXML
+from simplifier import parseXML
 
 import unittest
 from testdata import testData

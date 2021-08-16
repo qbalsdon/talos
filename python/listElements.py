@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import sys
-from fetchUI import parseXML
-from simplifier import setUp
+from simplifier import setUp, parseXML
 from midOf import midOfBounds
 import os, re
 from xml.etree.cElementTree import tostring as XmlToString
@@ -84,4 +83,4 @@ if __name__ == "__main__":
     args = sys.argv
     del args[0]
     headings = validateArgs(args)
-    print(pretty_print(filterList(parseXmlToList(parseXML(None, options)), headings)))
+    print(pretty_print(filterList(parseXmlToList(uiRoot), headings)))

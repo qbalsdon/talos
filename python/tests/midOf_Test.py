@@ -3,7 +3,7 @@ import sys
 sys.path.append('../../python')
 
 from midOf import *
-from fetchUI import *
+from simplifier import *
 
 import unittest
 from testdata import *

@@ -2,13 +2,13 @@
 import sys
 sys.path.append('../../python')
 
-from fetchUI import *
+from simplifier import *
 
 import unittest
 import os
 from testdata import *
 
-class TestFetchUI(unittest.TestCase):
+class TestSimplifier(unittest.TestCase):
     #====== process_device ========
     def test_xml_parse(self):
         result = parseXML(testData)

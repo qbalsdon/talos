@@ -4,10 +4,9 @@ An attempt at Python TDD.
 
 ## TODO (Commands):
 
-1. checkOnScreen
+1. alternate dark mode
 1. alternate brightness
     adb shell settings put system screen_brightness 0
-1. alternate dark mode
 1. alternate animations
 1. alternate show taps
 1. alternate show layout (`adb shell setprop debug.layout true && adb shell service call activity 1599295570` https://susuthapa19961227.medium.com/enable-layout-debugging-in-android-using-adb-64016d755441)
@@ -15,6 +14,7 @@ An attempt at Python TDD.
 1. alternate density toggle
     SECURE
         display_density_forced [None, 374.0, 540.0, '']
+1. Clean up naming conventions
 1. have a unary arguments processor in common.
    - just single arguments
    - multiple arguments (optionals, required, one of, multiples)
@@ -37,6 +37,8 @@ An attempt at Python TDD.
 1. :white_check_mark: swipe based on screen size
 1. :white_check_mark: unlockWithSwipe
 1. :white_check_mark: recordOn / recordOff
+1. :white_check_mark: ~checkOnScreen~ hasElements
+1. :white_check_mark: bash script to execute all tests
 
 ## TODO: UI
 
