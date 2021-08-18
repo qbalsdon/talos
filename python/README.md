@@ -4,9 +4,6 @@ An attempt at Python TDD.
 
 ## TODO (Commands):
 
-1. alternate dark mode
-1. alternate brightness
-    adb shell settings put system screen_brightness 0
 1. alternate animations
 1. alternate show taps
 1. alternate show layout (`adb shell setprop debug.layout true && adb shell service call activity 1599295570` https://susuthapa19961227.medium.com/enable-layout-debugging-in-android-using-adb-64016d755441)
@@ -39,6 +36,8 @@ An attempt at Python TDD.
 1. :white_check_mark: recordOn / recordOff
 1. :white_check_mark: ~checkOnScreen~ hasElements
 1. :white_check_mark: bash script to execute all tests
+1. :white_check_mark: alternate dark mode
+1. :white_check_mark: alternate brightness
 
 ## TODO: UI
 

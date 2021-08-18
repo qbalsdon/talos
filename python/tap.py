@@ -9,10 +9,13 @@ tap_usage="""
        -prop ELEMENT_PROPERTY -v ELEMENT_PROPERT_VALUE
 """
 
-if __name__ == "__main__":
-    options, uiRoot = setUp()
-    mid = midOf(options, uiRoot)
+def tap_element(options, root):
+    mid = midOf(options, root)
     if mid != None:
         adbCommand(["shell", "input", "tap", str(mid.get("x")), str(mid.get("y"))], device=options.get("device"), output=False)
     else:
         print("Element not found")
+
+if __name__ == "__main__":
+    options, uiRoot = setUp()
+    tap_element(options, uiRoot)
