@@ -87,9 +87,11 @@ def getDevice(deviceList = None, options = None):
     options["device"] = connectedDevices[0].get('Name')
     return options.get("device")
 
-def getScreenSize(rawData = None, options = None):
+def getScreenSize(rawData = None, options = None, device = None):
+    if device == None:
+        device = getDevice(options = options)
     if rawData == None:
-        rawData = adbCommand(["shell", "wm", "size"], getDevice(options = options))
+        rawData = adbCommand(["shell", "wm", "size"], device)
     sizeArr = re.findall(r"\d+", rawData)
     if len(sizeArr) != 2:
         return None

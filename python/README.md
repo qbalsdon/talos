@@ -4,13 +4,11 @@ An attempt at Python TDD.
 
 ## TODO (Commands):
 
-1. alternate animations
-1. alternate show taps
-1. alternate show layout (`adb shell setprop debug.layout true && adb shell service call activity 1599295570` https://susuthapa19961227.medium.com/enable-layout-debugging-in-android-using-adb-64016d755441)
-1. alternate colour inversion
-1. alternate density toggle
-    SECURE
-        display_density_forced [None, 374.0, 540.0, '']
+1. check why the following are not working:
+   - :white_check_mark: forcertl <-- somehow now needs a rattle and opening locale settings
+   - :white_check_mark: density <-- `adb shell wm density`
+   - :white_check_mark: animation
+1. print device state (animations on, rtl, darkmode, etc.)
 1. Clean up naming conventions
 1. have a unary arguments processor in common.
    - just single arguments
@@ -38,8 +36,22 @@ An attempt at Python TDD.
 1. :white_check_mark: bash script to execute all tests
 1. :white_check_mark: alternate dark mode
 1. :white_check_mark: alternate brightness
+1. :white_check_mark: alternate animations
+1. :white_check_mark: alternate show taps
+1. :white_check_mark: alternate show layout (`adb shell setprop debug.layout true && adb shell service call activity 1599295570`)
+1. :white_check_mark: alternate density toggle
 
 ## TODO: UI
 
 1. create UI with buttons
 1. draw wireframe UI
+
+## Special thanks
+
+- Suson Thapa, ["Enable layout debugging in Android using ADB"][0]
+- gamingexpert13 [answer on "adb command to open settings and change them"][1]
+- ["How to Change DPI Density on Android Without Root"][2]
+
+[0]: https://susuthapa19961227.medium.com/enable-layout-debugging-in-android-using-adb-64016d755441
+[1]: https://stackoverflow.com/a/68655882/932052
+[2]: https://www.droidviews.com/change-dpi-density-on-android-without-root/

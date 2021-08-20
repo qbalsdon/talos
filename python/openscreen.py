@@ -21,6 +21,7 @@ def validateArgs(arguments=None):
         return arguments[0]
     raise ValueError("Unknown argument\n    " + arguments[0])
 
+# https://stackoverflow.com/a/68655882/932052
 screen_options={
     "developer":"com.android.settings.APPLICATION_DEVELOPMENT_SETTINGS",
     "dark": "android.settings.DARK_THEME_SETTINGS",
@@ -30,7 +31,7 @@ screen_options={
     "wifi":"android.settings.WIFI_SETTINGS",
     "airplane": "android.settings.AIRPLANE_MODE_SETTINGS",
     "accessibility":"android.settings.ACCESSIBILITY_SETTINGS",
-
+    "locale": "android.settings.LOCALE_SETTINGS",
 }
 
 activity_screens={

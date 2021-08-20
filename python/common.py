@@ -37,6 +37,9 @@ def adbSetValue(level, variable_name, value, device=None, output=True):
     command_params=addAdb(["shell", "settings", "put", level, variable_name, value], device)
     subprocess.run(command_params, capture_output=True)
 
+def sysprops_transaction(device):
+    adbCommand(["shell", "service", "call", "activity", "1599295570"], device)
+
 def valueForParam(args, param):
     if len(args) == 0 or not param in args:
         return None

@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 import sys
 from functools import partial
-from simplifier import setUp
-from common import adbCommand, alternator
+from simplifier import setUp, parseXML
+from common import adbCommand, alternator, adbSetValue, adbGetValue, press_button
 from deviceManager import getScreenSize
-
+from openscreen import getOption
+from tap import tap_element
 """
-adb -s __DEVICE__ shell settings put gloabl debug.force_rtl [0.0 | 1.0]
+adb -s __DEVICE__ shell settings put global debug.force_rtl [0.0 | 1.0]
+adb shell settings put gloabl debug.force_rtl 0.0
 """
 
 forcertl_usage="""
@@ -27,22 +29,45 @@ def validateArgs(arguments=None):
             raise ValueError("Illegal combination of arguments. Usage: " + forcertl_usage)
     return None
 
-def modify_forcertl(new_value, device):
-    adbCommand(["shell", "setprop", "debug.force_rtl", new_value], device, False)
+def force_refresh(device):
     # force a refresh size
-    output_size = getScreenSize()
-    size_string = "{}x{}".format(int(output_size["width"] / 0.99), int(output_size["height"]))
-    adbCommand(["shell", "wm", "size", size_string], device, False)
-    size_string = "{}x{}".format(int(output_size["width"]), int(output_size["height"]))
-    adbCommand(["shell", "wm", "size", size_string], device, False)
+    # ----RATTLE----
+    # output_size = getScreenSize(device = device)
+    # size_string = "{}x{}".format(int(output_size["width"] / 0.59), int(output_size["height"]))
+    # adbCommand(["shell", "wm", "size", size_string], device, False)
+    # size_string = "{}x{}".format(int(output_size["width"]), int(output_size["height"]))
+    # adbCommand(["shell", "wm", "size", "reset"], device, False)
+    # -------------
+    # adbCommand(["adb", "shell", "settings", "put", "system", "user_rotation", "3"], device) # landscape
+    # adbCommand(["adb", "shell", "settings", "put", "system", "user_rotation", "0"], device) # portrait
+    adbCommand(getOption("locale"), device)
+    options = {"element":"dragHandle", "device":device}
+    tap_element(options, parseXML(options=options))
+    press_button("KEYCODE_BACK", device)
+
+def modify_forcertl(new_value, device):
+    # adb shell settings put global debug.force_rtl 1.0
+    adbSetValue("global", "debug.force_rtl", new_value, device)
+    prop_value = "false"
+    if new_value != "0":
+        prop_value = "true"
+
+    adbCommand(["shell", "setprop", "debug.force_rtl", prop_value], device, False)
+    # print("SET\nProp value:   [{}]\nGlobal value: [{}]".format(prop_value, new_value))
+    force_refresh(device)
 
 def get_forcertl(device):
-    return adbCommand(["shell", "getprop", "debug.force_rtl"], device)
+    prop_value = adbCommand(["shell", "getprop", "debug.force_rtl"], device)
+    global_value = str(adbGetValue("global", "debug.force_rtl", device))
+    global_value = global_value.replace(".0", "")
+    # print("GET\nProp value:   [{}]\nGlobal value: [{}]".format(prop_value, global_value))
+    return global_value
+
 
 def forcertl_dictionary(device):
     return {
-         "false": lambda: modify_forcertl("false", device),
-         "true": lambda: modify_forcertl("true", device)
+         "1": lambda: modify_forcertl("1", device),
+         "0": lambda: modify_forcertl("0", device)
     }
 
 if __name__ == "__main__":
