@@ -4,15 +4,16 @@ An attempt at Python TDD.
 
 ## TODO (Commands):
 
-1. check why the following are not working:
-   - :white_check_mark: forcertl <-- somehow now needs a rattle and opening locale settings
-   - :white_check_mark: density <-- `adb shell wm density`
-   - :white_check_mark: animation
 1. print device state (animations on, rtl, darkmode, etc.)
 1. Clean up naming conventions
 1. have a unary arguments processor in common.
    - just single arguments
    - multiple arguments (optionals, required, one of, multiples)
+1. List all
+  - accessibility headings
+  - links
+  - image content descriptions
+
 
 1. :white_check_mark: get the current device, read from parameters
 1. :white_check_mark: get the UI as XML and format
@@ -40,6 +41,10 @@ An attempt at Python TDD.
 1. :white_check_mark: alternate show taps
 1. :white_check_mark: alternate show layout (`adb shell setprop debug.layout true && adb shell service call activity 1599295570`)
 1. :white_check_mark: alternate density toggle
+1. :white_check_mark: check why the following are not working:
+   - :white_check_mark: forcertl <-- somehow now needs a rattle and opening locale settings
+   - :white_check_mark: density <-- `adb shell wm density`
+   - :white_check_mark: animation
 
 ## TODO: UI
 
