@@ -15,7 +15,5 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Execute Python Unit Test Script [./python/tests/test_all.sh]
-        run: |
-          chmod +x python/tests/test_all.sh
-          sh python/tests/test_all.sh
+      - name: Execute Python Unit Test Script [./python/tests/server_test.sh]
+        run: ./python/tests/server_test.sh
