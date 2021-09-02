@@ -1,0 +1,21 @@
+name: Run Python Test Script (main)
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Run Test Suite
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Execute Python Unit Test Script [./python/tests/test_all.sh]
+        run: |
+          chmod +x python/tests/test_all.sh
+          sh python/tests/test_all.sh
