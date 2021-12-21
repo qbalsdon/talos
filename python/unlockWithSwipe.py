@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import time
 import sys
 from simplifier import setUp
 from common import adbCommand, press_button, type_text
@@ -24,9 +25,23 @@ def ensure_screen_off(device, command=lambda: press_power(device)):
 def press_power(device):
     press_button("KEYCODE_POWER", device)
 
+def unlock(options, press_enter):
+    device=options.get("device")
+    ensure_screen_off(device)
+    screen_is_on = is_screen_on(device)
+    while screen_is_on:
+        press_power(device)
+        time.sleep(0.5)
+        screen_is_on = is_screen_on(device)
+
+    press_power(device)
+    swipe_device("u", options)
+    type_text(options.get("text"), device)
+    if press_enter:
+        press_button("KEYCODE_ENTER", device)
+
 if __name__ == "__main__":
     options = setUp(ui_required = False)
-    device = options.get("device")
     args = sys.argv
     del args[0]
     press_enter = False
@@ -36,11 +51,12 @@ if __name__ == "__main__":
         press_enter = True
 
     script_args = validateArgs(args, unlock_usage)
-    ensure_screen_off(device)
-    screen_is_on = is_screen_on(device)
-    while screen_is_on:
-        screen_is_on = is_screen_on(device)
-    press_power(device)
-    swipe_device("u", options)
-    type_text(options.get("text"), device)
-    press_button("KEYCODE_ENTER", device)
+    unlock(options, press_enter)
+    # ensure_screen_off(device)
+    # screen_is_on = is_screen_on(device)
+    # while screen_is_on:
+    #     screen_is_on = is_screen_on(device)
+    # press_power(device)
+    # swipe_device("u", options)
+    # type_text(options.get("text"), device)
+    # press_button("KEYCODE_ENTER", device)
