@@ -4,6 +4,9 @@ An attempt at Python TDD.
 
 ## TODO (Commands):
 
+1. ALL --help | -h options
+1. ALL altenator methods should deal with 'null' return
+  * e.g. flip can have null
 1. print device state (animations on, rtl, darkmode, etc.)
 1. Clean up naming conventions
 1. have a unary arguments processor in common.

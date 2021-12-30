@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import subprocess
 import sys
+import os
+import json
 
 sys.path.append('../../python')
 from unlockWithSwipe import *
@@ -13,7 +15,6 @@ def run_command(commands):
 
 def run_adb_command(device, commands):
     command_list = ["adb","-s", device] + commands
-    print(command_list)
     run_command(command_list)
 
 def adb_type_text(device, string):
@@ -21,6 +22,18 @@ def adb_type_text(device, string):
 
 def adb_type_key_code(device, key_code):
     run_adb_command(device, ["shell", "input", "keyevent", key_code])
+
+def enter_login_details(device):
+    adb_type_text(device, "milan.vidic@zuehlke.com")
+    adb_type_key_code(device, "KEYCODE_TAB")
+    adb_type_text(device, "gcZB5X4MU7PenKPPWj4zaPzep")
+    adb_type_key_code(device, "KEYCODE_ENTER")
+
+def turn_lights_off(device):
+    run_adb_command(device, ["shell", "settings", "put", "system", "screen_brightness", "5"])
+    run_adb_command(device, ["shell", "\"echo 000000 > /sys/devices/pwmleds.19/laohutou_status\""])
+    run_adb_command(device, ["shell", "\"echo 000000 > /sys/devices/pwmleds.20/laohutou_status\""])
+    run_adb_command(device, ["shell", "\"echo 000000 > /sys/devices/pwmleds.21/laohutou_status\""])
 
 def loop_command(device_list, fn):
     for device in device_list:
@@ -38,11 +51,30 @@ def device_home(device_list):
 def device_power(device_list):
     loop_command(device_list, lambda device: adb_type_key_code(device, "KEYCODE_POWER"))
 
+def get_device_name(device_serial):
+    names_file_location = os.environ['DEVICE_NAMES']
+    with open(names_file_location, 'r') as file:
+        data = file.read()
+    names = json.loads(data)
+    if device_serial in names:
+        return names[device_serial]
+    else:
+        return device_serial
+
 def device_scrcpy(device_list):
-    loop_command(device_list, lambda device: run_command_async(["scrcpy", "-s", device, "-Sw"]))
+    loop_command(device_list, lambda device: run_command_async(["scrcpy", "-s", device, "--window-title", get_device_name(device)]))
 
 def device_type(device_list, text):
     loop_command(device_list, lambda device: adb_type_text(device, text))
+
+def device_sound_down(device_list):
+    loop_command(device_list, lambda device: run_adb_command(device, ["shell", "service", "call", "audio", "4", "i32", "3", "i32", "7"]))
+
+def device_enter_login_details(device_list):
+    loop_command(device_list, lambda device: enter_login_details(device))
+
+def device_dim_lights(device_list):
+    loop_command(device_list, lambda device: turn_lights_off(device))
 
 # 0 -->  "KEYCODE_UNKNOWN"
 # 1 -->  "KEYCODE_MENU"

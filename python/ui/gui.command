@@ -36,6 +36,11 @@ def wifi_password_clicked():
         print("No password set")
         # tkinter.simpledialog.askstring("Password", "Type Wifi Password",password)
 
+def zuhlke_hotspot_password_clicked():
+    validate_then(lambda devices: device_type(devices, "Zuhlke1234$"))
+def quintin_hotspot_password_clicked():
+    validate_then(lambda devices: device_type(devices, "Qjay1983!"))
+
 def populate_devices_frame(container):
     global user_devices
     clear_frame(container)
@@ -47,7 +52,7 @@ def populate_devices_frame(container):
         selected_device = tk.StringVar()
         device_check = ttk.Checkbutton(
             container,
-            text=data[0] + " [" + data[1] + "]" ,
+            text=get_device_name(data[0]) + " [" + data[1] + "]" ,
             onvalue=data[0],
             offvalue="",
             variable=selected_device)
@@ -67,7 +72,12 @@ def create_button_frame(container):
         "Back": lambda: validate_then(device_back),
         "scrcpy": lambda: validate_then(device_scrcpy),
         "Home": lambda: validate_then(device_home),
-        "Wifi Password":wifi_password_clicked
+        "Home Wifi":wifi_password_clicked,
+        "Z Hotspot": zuhlke_hotspot_password_clicked,
+        "Q Hotspot": quintin_hotspot_password_clicked,
+        "Login Info": lambda: validate_then(device_type),
+        "Sound low": lambda: validate_then(device_sound_down),
+        "Dim lights": lambda: validate_then(device_dim_lights),
     }
     row = 0
     for text, event in buttons.items():
