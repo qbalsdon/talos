@@ -31,8 +31,12 @@ class XML_Viewer(Frame):
 
         if takefocus is not None:
             kwargs["takefocus"] = takefocus
-        self._searchbar = tk.Entry(self)
+
+        self._searchcriteria = tk.StringVar()
+        self._searchcriteria.trace_add("write", self._on_type)
+        self._searchbar = tk.Entry(self, textvariable = self._searchcriteria)
         self._searchbar.pack(fill=tk.X, expand=False)
+
         self._treeview = Treeview(self, **kwargs)
         self._treeview.heading("#0", text=heading_text)
 
@@ -46,6 +50,10 @@ class XML_Viewer(Frame):
             self.parse_xml(xml)
 
         self._treeview.pack(fill='both', expand=True)
+
+    def _on_type(self, var_name: str, var_index: str, operation: str):
+        self.clear()
+        self._walk_xml(self._element_tree.getroot(), search=self._searchcriteria.get())
 
     def _on_open(self, event):
         item_ID = self._treeview.focus()
@@ -86,23 +94,47 @@ class XML_Viewer(Frame):
         self._treeview.delete(*self._treeview.get_children())
 
     def _tag_name(self, node):
-        text = f"[{node.tag}]"
+        if node.tag == "node":
+            keys = node.attrib.keys()
+            if "class" in keys:
+                text = f'[{node.attrib["class"]}]'
+            elif "resource-id" in keys:
+                text = f'[{node.attrib["resource-id"]}]'
+            else:
+                text = f'[{node.tag}]'
+        else:
+            text = f'[{node.tag}]'
+
         return text
 
-    def _add_attrs_as_children(self, node, item):
+    def _add_valid_property(self, attrs, reference, name, parent):
+        if reference in attrs and len(attrs[reference]) > 0:
+            self._treeview.insert(parent, END, text = f'{name}="{attrs[reference]}"')
+
+    def _add_attrs_as_children(self, node, item, search=""):
+        result = False
         attrs = node.attrib
 
         a_names = list(attrs.keys())
         a_names.sort()
 
-        for a_name in a_names:
-            text = f'{a_name}="{attrs[a_name]}"'
-            self._treeview.insert(item, END, text = text)
+        if len(a_names) > 0:
+            self._add_valid_property(attrs, "resource-id", "id", item)
+            self._add_valid_property(attrs, "text", "text", item)
+            self._add_valid_property(attrs, "content-desc", "content-desc", item)
 
-    def _walk_xml(self, node, depth=0, parent=""):
-        text = self._tag_name(node)
+            parent = self._treeview.insert(item, END, text = "attributes")
+            for a_name in a_names:
+                text = f'{a_name}="{attrs[a_name]}"'
+                if len(search) > 1 and search in text:
+                    result = True
+                self._treeview.insert(parent, END, text = text)
+        return result
 
-        item = self._treeview.insert(parent, END, text = text, open=True)
+    def _walk_xml(self, node, depth=0, parent="", search=""):
+        node_name = self._tag_name(node)
+
+        item = self._treeview.insert(parent, END, text = node_name, open=True)
         self._item_ID_to_element[item] = node
 
         if node.text:
@@ -111,11 +143,17 @@ class XML_Viewer(Frame):
                 for line in text.splitlines():
                     self._treeview.insert(item, END, text = line)
 
-        self._add_attrs_as_children(node, item)
+        found_in_attr = self._add_attrs_as_children(node, item, search)
+
+        if len(search) > 1:
+            if found_in_attr or search in node_name:
+                self._treeview.selection_add(item)
+            elif node.text and search in node.text:
+                self._treeview.selection_add(item)
 
         child_nodes = sorted(list(node), key=attrgetter('tag'))
         for child_node in node:
-            self._walk_xml(child_node, depth+1, parent=item)
+            self._walk_xml(child_node, depth+1, parent=item, search=search)
 
         if node.tail:
             tail = node.tail.strip()

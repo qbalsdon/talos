@@ -105,7 +105,7 @@ class GuiPart:
     def create_xml_window(self, root, title, xml):
         window = tk.Toplevel(root)
         window.title(title)
-        XML_Viewer(window, xml, heading_text=title).pack()
+        XML_Viewer(window, xml, heading_text=title).pack(fill='both', expand=True)
 
     def show_xml(self, root, device_data):
         for device in device_data:

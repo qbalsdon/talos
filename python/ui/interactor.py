@@ -22,13 +22,16 @@ def run_on_all_selected_devices(fn, device_list):
         fn(list)
 
 def get_focus_app():
-    return os.environ['FOCUS_APP_PACKAGE']
+    return read_settings_file('FOCUS_APP_PACKAGE')
 
-def get_system_data(environment_variable):
-    file_location = os.environ[environment_variable]
+def read_settings_file(settings):
+    file_location = os.environ['TALOS_SETTINGS']
     with open(file_location, 'r') as file:
         data = file.read()
-    return json.loads(data)
+    return json.loads(data)[settings]
+
+def get_system_data(setting_section):
+    return read_settings_file(setting_section)
 
 def get_device_details(device_serial, key, default):
     names = get_system_data('DEVICE_NAMES')

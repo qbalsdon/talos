@@ -135,7 +135,7 @@ class ActionMapper:
                 "Current activity": lambda: self.get_current_activity(),
                 "Open Android Settings": lambda: device_open_screen(self.selected_devices_lambda(), "android.settings.SETTINGS"),
                 "System Report": lambda: self.get_device_report(),
-                "UI Report": lambda: self.get_ui_report(),
+                "Layout Inspector": lambda: self.get_ui_report(),
                 "Quick Navigate": self.create_screen_options(),
                 "Display":{
                     "Contrast (Max)": lambda: device_screen_brightness(self.selected_devices_lambda(), 100),
