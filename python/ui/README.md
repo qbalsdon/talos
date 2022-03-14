@@ -10,7 +10,7 @@ The idea is that these are 'developer' passwords and don't need to be too secure
 
 ```
 {
-    "FOCUS_APP_PACKAGE": "media.tiger.tigerbox",
+    "FOCUS_APP_PACKAGE": "your.app.package",
     "DEVICE_NAMES": {
       "Serial_1" : {
             "name": "Friendly Name 1",

@@ -123,9 +123,9 @@ class ActionMapper:
             "Input": {
                 "Custom" : lambda: self.get_user_input("What do you want to type?"),
                 "Buttons": {
-                    "Power" : lambda: self.execute_command(device_power),
-                    "Back" : lambda: self.execute_command(device_back),
                     "Home" : lambda: self.execute_command(device_home),
+                    "Back" : lambda: self.execute_command(device_back),
+                    "Power" : lambda: self.execute_command(device_power),
                     "Reboot" : lambda: self.execute_command(device_reboot),
                 },
                 "Logins" : self.create_login_option(),
