@@ -45,9 +45,15 @@ def getOption(option):
     if option in activity_screens:
         return ["shell", "am", "start", "-n", activity_screens[option]]
 
+def open_activity(device, screen):
+    commands = getOption(screen)
+    print(f"~~> Running adb: {commands}")
+    adbCommand(commands, device)
+
 if __name__ == "__main__":
     options = setUp(ui_required = False)
     device = options.get("device")
     args = sys.argv
     del args[0]
-    adbCommand(getOption(validateArgs(args)), device)
+    screen_option = validateArgs(args)
+    open_activity(device, screen_option)

@@ -10,13 +10,17 @@ unlock_usage="""
 """
 
 def get_screen_settings(device):
-    return adbCommand(["shell", "dumpsys", "power"], device)
+    return adbCommand(["shell", "dumpsys", "window"], device)
 
 def is_screen_on(device, get_settings=get_screen_settings):
     settings = get_settings(device)
-    if "Display Power: state=ON" in settings:
+    if "mScreenOnFully=true" in settings:
         return True
-    return False
+    elif "mScreenOnFully=false" in settings:
+        return False
+    else:
+        print("Unknown - assuming off")
+        return False
 
 def ensure_screen_off(device, command=lambda: press_power(device)):
     if is_screen_on(device):
@@ -27,14 +31,14 @@ def press_power(device):
 
 def unlock(options, press_enter):
     device=options.get("device")
-    ensure_screen_off(device)
+    # ensure_screen_off(device)
     screen_is_on = is_screen_on(device)
-    while screen_is_on:
+    while not screen_is_on:
         press_power(device)
         time.sleep(0.5)
         screen_is_on = is_screen_on(device)
 
-    press_power(device)
+    # press_power(device)
     swipe_device("u", options)
     type_text(options.get("text"), device)
     if press_enter:

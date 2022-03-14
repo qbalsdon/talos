@@ -42,7 +42,7 @@ def validateArgs(arguments=None):
     return None
 
 def modify_font_scale(new_value, device):
-    adbSetValue("system", "font_scale", new_value, device)
+    adbSetValue("system", "font_scale", str(new_value), device)
 
 def get_font_scale(device):
     return float(adbGetValue("system", "font_scale", device))
@@ -55,10 +55,13 @@ def font_scale_dictionary(device):
          1.13: lambda: modify_font_scale("1.13", device)
     }
 
+def toggle_font_scale(device, direction):
+    alternator(lambda: get_font_scale(device), font_scale_dictionary(device), direction)
+
 if __name__ == "__main__":
     options = setUp(ui_required = False)
     device = options.get("device")
     args = sys.argv
     del args[0]
     direction = validateArgs(args)
-    alternator(lambda: get_font_scale(device), font_scale_dictionary(device), direction)
+    toggle_font_scale(device, direction)

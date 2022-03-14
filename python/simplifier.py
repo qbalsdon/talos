@@ -6,12 +6,10 @@ import xml.etree.cElementTree as ET
 
 
 def removeWindowDump(fileReference, device=None):
-    adbCommand(["shell", "rm", "/sdcard/"+fileReference], device, output=False)
+    adbCommand(["shell", "rm", fileReference], device, output=False)
 
 def fetchWindowDump(device, location, OUT_FILE):
     try:
-        removeWindowDump(location, device)
-        adbCommand(["exec-out", "uiautomator", "dump"], device)
         adbCommand(["pull", location], device, output=False)
         with open(OUT_FILE) as file:
             data = file.read()
@@ -23,14 +21,16 @@ def fetchWindowDump(device, location, OUT_FILE):
 
 def fetchDeviceRawData(options = None):
     device = getDevice(options = options)
+    LOCATIONS=["/storage/emulated/legacy/", "/sdcard/", "/storage/sdcard/"]
+    INDEX=0
     OUT_FILE = "window_dump.xml"
-    PHONE_FILE="/sdcard/"+OUT_FILE
-    ALT_PHONE_FILE="/storage/sdcard/"+OUT_FILE
-
-    data = fetchWindowDump(device, PHONE_FILE, OUT_FILE)
-    if data == None:
-        print("\n!!Failed at " + PHONE_FILE + " attempting " + ALT_PHONE_FILE + " [/storage/sdcard/window_dump.xml]!!\n")
-        fetchWindowDump(device, ALT_PHONE_FILE, OUT_FILE)
+    data=None
+    while data == None and INDEX < len(LOCATIONS):
+        location=f"{LOCATIONS[INDEX]}{OUT_FILE}"
+        removeWindowDump(location, device)
+        adbCommand(["exec-out", "uiautomator", "dump"], device, output=False)
+        data = fetchWindowDump(device, location, OUT_FILE)
+        INDEX = INDEX + 1
     return data
 
 def parseXML(data = None, options = None):

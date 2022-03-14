@@ -5,6 +5,8 @@ from common import adbCommand, adbGetValue, press_button
 from openscreen import getOption
 from tap import tap_element
 
+import time
+
 darkMode_usage="""
   darkMode.py [-s __DEVICE__] [-t, --toggle, -d, --dark, -l, --light]
 """
@@ -48,6 +50,20 @@ def change_required(device, argument, read_state=get_state):
     state = read_state(device)
     return (state == 1 and argument == "dark") or (state == 2 and argument == "light")
 
+def dark_mode(device, options, argument):
+    changeRequired = change_required(device, argument)
+    if options == None:
+        options = {}
+        options["device"] = device
+
+    if changeRequired:
+        adbCommand(getOption("display"), device)
+        uiRoot = parseXML(options = options)
+        options["property"] = "content-desc"
+        options["value"] = "Dark theme"
+        tap_element(options, uiRoot)
+        time.sleep(0.25)
+        press_button("KEYCODE_BACK", device)
 
 if __name__ == "__main__":
     options = setUp(ui_required = False)
@@ -57,11 +73,4 @@ if __name__ == "__main__":
 
     argument = validateArgs(args)
 
-    changeRequired = change_required(device, argument)
-
-    if changeRequired:
-        adbCommand(getOption("display"), device)
-        uiRoot = parseXML(options = options)
-        options["element"] = "switchWidget"
-        tap_element(options, uiRoot)
-        press_button("KEYCODE_BACK", device)
+    dark_mode(device, options, argument)

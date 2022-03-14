@@ -77,10 +77,13 @@ def accessibility_dictionary(device):
          "com.google.android.apps.accessibility.auditor/com.google.android.apps.accessibility.auditor.ScannerService:com.android.talkback/com.google.android.marvin.talkback.TalkBackService" : lambda: turn_on_scanner(device)
     }
 
+def turn_on_accessibility_service(device, service):
+    alternator(lambda: get_accessibility_state(device), accessibility_dictionary(device), service)
+
 if __name__ == "__main__":
     options = setUp(ui_required = False)
     device = options.get("device")
     args = sys.argv
     del args[0]
     service = validateArgs(args)
-    alternator(lambda: get_accessibility_state(device), accessibility_dictionary(device), service)
+    turn_on_accessibility_service(device, service)

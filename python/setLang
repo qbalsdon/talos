@@ -1,0 +1,8 @@
+#!/bin/sh
+
+DEVICE=$1
+LANG=$2
+COUNTRY=$3
+
+adb -s ${DEVICE} shell "setprop persist.sys.language ${LANG}; setprop persist.sys.country ${COUNTRY}; setprop ctl.restart zygote"
+adb -s ${DEVICE} shell "setprop persist.sys.locale ${LANG}-${COUNTRY}; setprop ctl.restart zygote"

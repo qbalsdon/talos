@@ -12,7 +12,9 @@ tap_usage="""
 def tap_element(options, root):
     mid = midOf(options, root)
     if mid != None:
-        adbCommand(["shell", "input", "tap", str(mid.get("x")), str(mid.get("y"))], device=options.get("device"), output=False)
+        device = options.get("device")
+        # print(f"   --> Tapping [{device}] at [{mid}]")
+        adbCommand(["shell", "input", "tap", str(mid.get("x")), str(mid.get("y"))], device=device, output=False)
     else:
         print("Element not found")
 
