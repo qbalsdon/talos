@@ -16,7 +16,7 @@ The idea is that these are 'developer' passwords and don't need to be too secure
             "name": "Friendly Name 1",
             "scrcpy": ""
         },
-      "13021FDD4005XC" : {
+      "Serial_2" : {
             "name": "Friendly Name 2",
             "scrcpy": "-Sw"
         }

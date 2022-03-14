@@ -101,6 +101,10 @@ class ActionMapper:
         report = device_get_ui(devices)
         self.show_xml(report)
 
+    def say_text(self):
+        text = self.user_input("What do you want the device(s) to say?")
+        device_accessibility_action(self.selected_devices_lambda(), "ACTION_SAY", ["-e", "PARAMETER_TEXT", f"'{text}'"]),
+
     def set_language(language, code):
         # device_set_language(self.selected_devices_lambda(), language, code)
         print("TODO: set language")
@@ -190,7 +194,7 @@ class ActionMapper:
                     },
                     "A11y Menu": lambda: device_accessibility_action(self.selected_devices_lambda(), "ACTION_SWIPE_UP_RIGHT"),
                     "A11y Curtain": lambda: device_accessibility_action(self.selected_devices_lambda(), "ACTION_CURTAIN"),
-                    "Say": lambda: print("Show an input dialog to say something")
+                    "Say": lambda: self.say_text()
                 },
                 "Toogle RTL" : lambda: device_force_rtl(self.selected_devices_lambda()),
                 "A11y Settings": lambda: device_open_activity(self.selected_devices_lambda(), "accessibility"),

@@ -291,9 +291,11 @@ def device_turn_on_accessibility_service(device_list, service):
 
     loop_command(device_list, lambda device, param=action: turn_on_accessibility_service(device, param))
 
-def device_accessibility_action(device_list, action):
+def device_accessibility_action(device_list, action, params):
     # adb shell am broadcast -a com.balsdon.talkback.accessibility -e ACTION "ACTION_SWIPE_LEFT"
-    loop_command(device_list, lambda device, param=action: run_adb_command(device, ["shell", "am", "broadcast", "-a", "com.balsdon.talkback.accessibility", "-e", "ACTION", action]))
+    command_params = ["shell", "am", "broadcast", "-a", "com.balsdon.talkback.accessibility", "-e", "ACTION", action]
+    command_params = command_params + params
+    loop_command(device_list, lambda device: run_adb_command(device, command_params))
 
 def device_font_scale(device_list, size):
     if size == None:
