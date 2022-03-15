@@ -69,7 +69,7 @@ class GuiPart:
                 if data[0] in previous_selection:
                     selected_device.set(data[0])
                 self.user_devices.append(selected_device)
-                device_check.pack(fill=tk.X, side=tk.TOP)
+                device_check.pack(fill=tk.X, side=tk.TOP, padx=(10, 10), pady=(5, 5))
                 current_row = current_row + 1
                 self.create_binding(
                     device_check,
@@ -79,7 +79,7 @@ class GuiPart:
 
     def create_device_frame(self, container):
         devices_frame = ttk.Frame(container)
-        devices_frame.grid(row=1, column=0, columnspan=1, sticky='NW')
+        devices_frame.grid(row=1, column=0, columnspan=1, sticky='NW', pady=(5, 5))
         self.populate_devices_frame(devices_frame)
         return devices_frame
 
