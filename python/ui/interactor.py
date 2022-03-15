@@ -179,10 +179,7 @@ def device_set_language(device_list, language_code):
     loop_command(device_list, lambda device: set_language(device, language_code))
 
 def get_device_details(device_serial, key, default):
-    names_file_location = os.environ['DEVICE_NAMES']
-    with open(names_file_location, 'r') as file:
-        data = file.read()
-    names = json.loads(data)
+    names = get_system_data('DEVICE_NAMES')
     if device_serial in names:
         return names[device_serial][key]
     else:

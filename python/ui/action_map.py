@@ -119,7 +119,7 @@ class ActionMapper:
         self.action_map = {
             "File": {
                 "About" : lambda: print("TODO: Show about screen"),
-                "scrcpy": lambda: self.execute_command(device_scrcpy),
+                "scrcpy": [lambda: self.execute_command(device_scrcpy), "Command-s"],
                 "record": lambda: self.execute_command(device_record),
                 "kill scrcpy": lambda: run_command(["pkill","scrcpy"]),
                 "Exit" : lambda: self.exit(),
@@ -187,6 +187,8 @@ class ActionMapper:
                     "Left": [lambda: device_accessibility_action(self.selected_devices_lambda(), "ACTION_SWIPE_LEFT"), "Command-Left"],
                     "Up": [lambda: device_accessibility_action(self.selected_devices_lambda(), "ACTION_SWIPE_UP"), "Command-Up"],
                     "Down": [lambda: device_accessibility_action(self.selected_devices_lambda(), "ACTION_SWIPE_DOWN"), "Command-Down"],
+                    "Tap": lambda: device_accessibility_action(self.selected_devices_lambda(), "ACTION_CLICK"),
+                    "Long Tap": lambda: device_accessibility_action(self.selected_devices_lambda(), "ACTION_LONG_CLICK"),
                     "Volume": {
                         "Up": lambda: device_accessibility_action(self.selected_devices_lambda(), "ACTION_VOLUME_UP"),
                         "Down": lambda: device_accessibility_action(self.selected_devices_lambda(), "ACTION_VOLUME_DOWN"),
