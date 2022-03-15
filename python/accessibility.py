@@ -80,6 +80,13 @@ def accessibility_dictionary(device):
 def turn_on_accessibility_service(device, service):
     alternator(lambda: get_accessibility_state(device), accessibility_dictionary(device), service)
 
+def toggle_accessibility_service(device, desired_state):
+    current_state = get_accessibility_state(device)
+    if current_state == desired_state:
+        turn_off(device)
+    else:
+        accessibility_dictionary(device)[desired_state]()
+
 if __name__ == "__main__":
     options = setUp(ui_required = False)
     device = options.get("device")

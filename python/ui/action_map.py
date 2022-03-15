@@ -170,7 +170,7 @@ class ActionMapper:
             "A11y": {
                 "TalkBack" : {
                     "Turn off": lambda: device_turn_on_accessibility_service(self.selected_devices_lambda(), "disable"),
-                    "Developer tools (with Screen Reader)": lambda: device_turn_on_accessibility_service(self.selected_devices_lambda(), "screenreader"),
+                    "Developer tools (with TalkBack)": [lambda: device_turn_on_accessibility_service(self.selected_devices_lambda(), "screenreader"), "Command-T"],
                     "Scanner": lambda: device_turn_on_accessibility_service(self.selected_devices_lambda(), "accessibilityscanner"),
                 },
                 "Dark mode": lambda: device_dark_mode_toggle(self.selected_devices_lambda()),
@@ -183,10 +183,10 @@ class ActionMapper:
                     "Custom": lambda: self.get_input_then("Please enter font scale",lambda input: device_font_scale(self.selected_devices_lambda(), input)),
                 },
                 "Developer tools": {
-                    "Right": lambda: device_accessibility_action(self.selected_devices_lambda(), "ACTION_SWIPE_RIGHT"),
-                    "Left": lambda: device_accessibility_action(self.selected_devices_lambda(), "ACTION_SWIPE_LEFT"),
-                    "Up": lambda: device_accessibility_action(self.selected_devices_lambda(), "ACTION_SWIPE_UP"),
-                    "Down": lambda: device_accessibility_action(self.selected_devices_lambda(), "ACTION_SWIPE_DOWN"),
+                    "Right": [lambda: device_accessibility_action(self.selected_devices_lambda(), "ACTION_SWIPE_RIGHT"), "Command-Right"],
+                    "Left": [lambda: device_accessibility_action(self.selected_devices_lambda(), "ACTION_SWIPE_LEFT"), "Command-Left"],
+                    "Up": [lambda: device_accessibility_action(self.selected_devices_lambda(), "ACTION_SWIPE_UP"), "Command-Up"],
+                    "Down": [lambda: device_accessibility_action(self.selected_devices_lambda(), "ACTION_SWIPE_DOWN"), "Command-Down"],
                     "Volume": {
                         "Up": lambda: device_accessibility_action(self.selected_devices_lambda(), "ACTION_VOLUME_UP"),
                         "Down": lambda: device_accessibility_action(self.selected_devices_lambda(), "ACTION_VOLUME_DOWN"),

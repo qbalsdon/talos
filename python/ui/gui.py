@@ -32,6 +32,19 @@ class GuiPart:
             name = f"{name} ({device_serial[0:5]}...)"
         return name
 
+    def create_binding(self, listener, binding_name, fn):
+        binding = f"<{binding_name}>"
+        if len(binding_name) == 1:
+            binding = f"{binding_name}"
+        # print(f"Key bind: [{binding}]")
+        listener.bind_all(binding, lambda event: fn())
+
+    def toggle_device(self, device_serial, str_var):
+        if str_var.get() == device_serial:
+            str_var.set("")
+        else:
+            str_var.set(device_serial)
+
     def populate_devices_frame(self, container):
         self.clear_frame(container)
         previous_selection = []
@@ -58,6 +71,11 @@ class GuiPart:
                 self.user_devices.append(selected_device)
                 device_check.pack(fill=tk.X, side=tk.TOP)
                 current_row = current_row + 1
+                self.create_binding(
+                    device_check,
+                    f"{current_row}",
+                    lambda device_serial=data[0], variable=selected_device: self.toggle_device(device_serial, variable)
+                )
 
     def create_device_frame(self, container):
         devices_frame = ttk.Frame(container)
@@ -111,15 +129,6 @@ class GuiPart:
         for device in device_data:
             self.create_xml_window(root, self.device_name_formatted(device), device_data[device])
 
-    def key(self, event):
-        if event.char == event.keysym:
-            msg = 'Normal Key %r' % event.char
-        elif len(event.char) == 1:
-            msg = 'Punctuation Key %r (%r)' % (event.keysym, event.char)
-        else:
-            msg = 'Special Key %r' % event.keysym
-        print(f"key event: {msg}")
-
     def __init__(self, root, queue, endCommand):
         self.queue = queue
         self.user_devices = []
@@ -135,11 +144,18 @@ class GuiPart:
             lambda data: self.show_table(root, data),
             lambda data: self.show_xml(root, data),
             lambda: root.destroy())
-        create_menu(root, action_mapper.action_map)
+        menu, key_bindings = create_menu(root, action_mapper.action_map)
         self.devices_frame = self.create_device_frame(root)
         self.devices_frame.grid(row=0, column=0, sticky='NW')
-        root.bind_all('<Key>', self.key)
-        # Add more GUI stuff here depending on your specific needs
+        for binding in key_bindings:
+            arr=binding.split("-")
+            modifier = arr[0]
+            key = arr[1]
+            if len(key) == 1:
+                key = key.lower()
+            binding_name=f"{modifier}-{key}"
+            self.create_binding(root, binding_name, key_bindings[binding])
+
 
     def processIncoming(self):
         """Handle all messages currently in the queue, if any."""

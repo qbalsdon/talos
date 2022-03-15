@@ -10,7 +10,7 @@ from unlockWithSwipe import *
 from darkMode import *
 from common import alternator, adbSetValue
 from forcertl import get_forcertl, forcertl_dictionary
-from accessibility import turn_on_accessibility_service
+from accessibility import turn_on_accessibility_service, toggle_accessibility_service
 from fontscale import toggle_font_scale, modify_font_scale
 from currentactivity import current_activity_name
 from openscreen import screen_options, open_activity
@@ -289,7 +289,7 @@ def device_turn_on_accessibility_service(device_list, service):
     if service in service_shortcut:
         action = service_shortcut[service]
 
-    loop_command(device_list, lambda device, param=action: turn_on_accessibility_service(device, param))
+    loop_command(device_list, lambda device, param=action: toggle_accessibility_service(device, param))
 
 def device_accessibility_action(device_list, action, params=[]):
     # adb shell am broadcast -a com.balsdon.talkback.accessibility -e ACTION "ACTION_SWIPE_LEFT"

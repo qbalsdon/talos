@@ -46,3 +46,7 @@ The idea is that these are 'developer' passwords and don't need to be too secure
 }
 
 ```
+
+### [Key bindings][1]
+
+[1] https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/key-names.html
