@@ -164,6 +164,23 @@ class ActionMapper:
                 "Properties" :{
                     "Clear" : lambda: device_clear_qa_settings(self.selected_devices_lambda()),
                     "No update": lambda: device_app_no_update(self.selected_devices_lambda()),
+                    "No reboot": lambda: device_app_no_reboot(self.selected_devices_lambda()),
+                    "Submit logs": {
+                        "Enable": lambda: device_app_submit_logs(self.selected_devices_lambda(), True),
+                        "Disable": lambda: device_app_submit_logs(self.selected_devices_lambda(), False),
+                    },
+                    "Submit logs": {
+                        "Enable": lambda: device_app_submit_logs(self.selected_devices_lambda(), True),
+                        "Disable": lambda: device_app_submit_logs(self.selected_devices_lambda(), False),
+                    },
+                    "Force crash": {
+                        "Enable": lambda: device_app_force_crash(self.selected_devices_lambda(), True),
+                        "Disable": lambda: device_app_force_crash(self.selected_devices_lambda(), False),
+                    },
+                    "Adb tools": {
+                        "Enable": lambda: device_app_set_value(self.selected_devices_lambda(), "adb.tools.enabled", "true"),
+                        "Disable": lambda: device_app_set_value(self.selected_devices_lambda(), "adb.tools.enabled", "false"),
+                    }
                 },
                 "Clear cache": lambda: device_clear_cache(self.selected_devices_lambda(), get_focus_app())
             },

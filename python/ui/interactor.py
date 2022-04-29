@@ -109,6 +109,24 @@ def open_app_settings(device):
 def app_no_update(device):
     run_adb_command(device, ["shell", "am", "broadcast", "-a", "tigerbox.action.config.set", "-e", "software.version.date", "2051-01-01T00:00:00.000+0000"])
 
+def app_no_reboot(device):
+    run_adb_command(device, ["shell", "am", "broadcast", "-a", "tigerbox.action.config.set", "-e", "reboot.enable", "false"])
+
+def app_submit_logs(device, able):
+    if able:
+        run_adb_command(device, ["shell", "am", "broadcast", "-a", "tigerbox.action.config.set", "-e", "flag.submit.logs", "true"])
+    else:
+        run_adb_command(device, ["shell", "am", "broadcast", "-a", "tigerbox.action.config.set", "-e", "flag.submit.logs", "false"])
+
+def app_force_crash(device, able):
+    if able:
+        run_adb_command(device, ["shell", "am", "broadcast", "-a", "tigerbox.action.config.set", "-e", "flag.force.crash", "true"])
+    else:
+        run_adb_command(device, ["shell", "am", "broadcast", "-a", "tigerbox.action.config.set", "-e", "flag.force.crash", "false"])
+
+def app_set_value(device, setting, value):
+    run_adb_command(device, ["shell", "am", "broadcast", "-a", "tigerbox.action.config.set", "-e", setting, value])
+
 def get_device_list():
     return subprocess.run(["adb","devices"], capture_output=True).stdout.decode().strip().split('\n', 1)[-1]
 
@@ -225,7 +243,6 @@ def start_recording(device):
 
 
 def onboarding_no_update(device, wifi_name, wifi_password, user_name, user_password):
-    # .//Users/quba/repo/tigerBox/qa_scripts/onboarding_no_update.sh -s KXaPH1dhGlks32qnR2vp6v -w "FD43 Hyperoptic 1Gb Fibre 2.4Ghz" -p frRFNJP9gKRe
     script="/Users/quba/repo/tigerBox/qa_scripts/onboarding_no_update.sh"
     run_command_async([script, "-s", device, "-w", wifi_name, "-p", wifi_password, "-un", user_name, "-up", user_password])
 
@@ -266,8 +283,20 @@ def device_open_app_settings(device_list):
     loop_command(device_list, lambda device: open_app_settings(device))
 def device_app_no_update(device_list):
     loop_command(device_list, lambda device: app_no_update(device))
+def device_app_no_reboot(device_list):
+    loop_command(device_list, lambda device: app_no_reboot(device))
+
+def device_app_set_value(device_list, setting, value):
+    loop_command(device_list, lambda device: app_set_value(device, setting, value))
+
 def device_dark_mode_toggle(device_list):
     loop_command(device_list, lambda device: dark_mode(device, None ,None))
+
+def device_app_submit_logs(device_list, value):
+    loop_command(device_list, lambda device: app_submit_logs(device, value))
+def device_app_force_crash(device_list, value):
+    loop_command(device_list, lambda device: app_force_crash(device, value))
+
 
 def force_rtl(device):
     alternator(lambda: get_forcertl(device), forcertl_dictionary(device), None)
