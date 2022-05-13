@@ -124,6 +124,9 @@ def app_force_crash(device, able):
     else:
         run_adb_command(device, ["shell", "am", "broadcast", "-a", "tigerbox.action.config.set", "-e", "flag.force.crash", "false"])
 
+def app_set_config(device, key, value):
+    run_adb_command(device, ["shell", "am", "broadcast", "-a", "tigerbox.action.config.set", "-e", key, value])
+
 def app_set_value(device, setting, value):
     run_adb_command(device, ["shell", "am", "broadcast", "-a", "tigerbox.action.config.set", "-e", setting, value])
 
@@ -296,6 +299,8 @@ def device_app_submit_logs(device_list, value):
     loop_command(device_list, lambda device: app_submit_logs(device, value))
 def device_app_force_crash(device_list, value):
     loop_command(device_list, lambda device: app_force_crash(device, value))
+def device_set_config(device_list, key, value):
+    loop_command(device_list, lambda device: app_set_config(device, key, value))
 
 
 def force_rtl(device):

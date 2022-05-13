@@ -177,6 +177,10 @@ class ActionMapper:
                         "Enable": lambda: device_app_force_crash(self.selected_devices_lambda(), True),
                         "Disable": lambda: device_app_force_crash(self.selected_devices_lambda(), False),
                     },
+                    "Autoplay": {
+                        "Enable": lambda: device_set_config(self.selected_devices_lambda(), "flag.autoplay", "true"),
+                        "Disable": lambda: device_set_config(self.selected_devices_lambda(), "flag.autoplay", "false"),
+                    },
                     "Adb tools": {
                         "Enable": lambda: device_app_set_value(self.selected_devices_lambda(), "adb.tools.enabled", "true"),
                         "Disable": lambda: device_app_set_value(self.selected_devices_lambda(), "adb.tools.enabled", "false"),
