@@ -28,7 +28,10 @@ def convert_settings_to_dictionary(file_contents):
         if len(line) == 0:
             continue
         values = line.split("=")
-        return_dict[values[0]] = attempt_numeric_conversion(values[1])
+        if len(values) == 2:
+            return_dict[values[0]] = attempt_numeric_conversion(values[1])
+        else:
+            return_dict[values[0]] = ''
 
     return return_dict
 
